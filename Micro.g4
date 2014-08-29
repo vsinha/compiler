@@ -13,13 +13,13 @@ KEYWORD
   | 'STRING' | 'FLOAT' | 'TRUE' | 'FALSE'
   ;
 
+COMMENT: '--'(~('\r'|'\n'))* ;
 
-// TODO we should be able to send this to a 'hidden' channel 
-WHITESPACE
-  :  (' ' | '\t' | '\n' | '\r' | '\f')+ 
-  ; 
+WHITESPACE:  (' ' | '\t' | '\n' | '\r' | '\f')+ -> skip; 
 
 INTLITERAL: [0-9]+;
+
+STRINGLITERAL: '"' (~('\n'|'\r') )*? '"';
 
 // TODO this should limit identifiers to 30 characters
 IDENTIFIER: [A-z_][A-z0-9_]+;
@@ -27,6 +27,3 @@ IDENTIFIER: [A-z_][A-z0-9_]+;
 OPERATOR: (':=' | '+' | '-' | '/' | '=' 
          | '!=' | '<' | '>' | '(' | ')' 
          | ';' | ',' | '<=' | '>=');
-
-
-

@@ -12,11 +12,9 @@ public class Micro {
             if (token.getType() == MicroLexer.EOF) {
                 break;
             }
-            String tokenName = MicroLexer.tokenNames[token.getType()];
-            if (!tokenName.equals("WHITESPACE")) {
-                System.out.println("Token Type: " + tokenName);
-                System.out.println("Value " + token.getText());
-            }
+            System.out.println("Token Type: " 
+                    + MicroLexer.tokenNames[token.getType()]);
+            System.out.println("Value " + token.getText());
         }
                
 
