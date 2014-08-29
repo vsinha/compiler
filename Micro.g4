@@ -13,6 +13,7 @@ KEYWORD
   | 'STRING' | 'FLOAT' | 'TRUE' | 'FALSE'
   ;
 
+COMMENT: '--'(~('\r'|'\n'))* ;
 
 // TODO we should be able to send this to a 'hidden' channel 
 WHITESPACE
