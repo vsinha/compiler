@@ -6,16 +6,23 @@ public class Micro {
         System.out.println(args[0]);
         ANTLRFileStream input = new ANTLRFileStream(args[0]);
         MicroLexer lexer = new MicroLexer(input);
+
         while(true) {
             Token token = lexer.nextToken();
             if (token.getType() == MicroLexer.EOF) {
                 break;
             }
-            System.out.println(token.getType() + " " + token.getText());
+            String tokenName = MicroLexer.tokenNames[token.getType()];
+            if (!tokenName.equals("WHITESPACE")) {
+                System.out.println("Token Type: " + tokenName);
+                System.out.println("Value " + token.getText());
+            }
         }
                
+
         /*
         CommonTokenStream tokens = new CommonTokenStream(lexer);
+
         MicroParser parser = new MicroParser(tokens);
 
         ParseTree tree = parser.program();
