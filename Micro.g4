@@ -19,6 +19,8 @@ WHITESPACE:  (' ' | '\t' | '\n' | '\r' | '\f')+ -> skip;
 
 INTLITERAL: [0-9]+;
 
+FLOATLITERAL: [0-9]*\.[0-9]*;
+
 STRINGLITERAL: '"' (~('\n'|'\r') )*? '"';
 
 // TODO this should limit identifiers to 30 characters
