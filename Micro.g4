@@ -13,17 +13,16 @@ KEYWORD
   ;
 
 
+// TODO we should be able to send this to a 'hidden' channel 
 WHITESPACE
   :  (' ' | '\t' | '\n' | '\r' | '\f')+ 
   ; 
-
-/*
-decl: string_decl_list {decl} 
-  | var_decl_list {decl}
-  | empty;
-*/
 
 INTLITERAL: [0-9]+;
 
 // TODO this should limit identifiers to 30 characters
 IDENTIFIER: [A-z][A-z0-9_]+;
+
+OPERATOR: (':=' | '+' | '-' | '/' | '=' 
+         | '!=' | '<' | '>' | '(' | ')' 
+         | ';' | ',' | '<=' | '>=');
