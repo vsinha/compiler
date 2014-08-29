@@ -13,6 +13,10 @@ KEYWORD
   ;
 
 
+WHITESPACE
+  :  (' ' | '\t' | '\n' | '\r' | '\f')+ 
+  ; 
+
 /*
 decl: string_decl_list {decl} 
   | var_decl_list {decl}
@@ -20,3 +24,6 @@ decl: string_decl_list {decl}
 */
 
 INTLITERAL: [0-9]+;
+
+// TODO this should limit identifiers to 30 characters
+IDENTIFIER: [A-z][A-z0-9_]+;
