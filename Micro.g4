@@ -12,8 +12,6 @@ KEYWORD
   | 'END'
   ;
 
-PROGRAM: 'PROGRAM';
-BEGIN: 'BEGIN':
 
 /*
 decl: string_decl_list {decl} 
