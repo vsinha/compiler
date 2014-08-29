@@ -15,10 +15,7 @@ KEYWORD
 
 COMMENT: '--'(~('\r'|'\n'))* ;
 
-// TODO we should be able to send this to a 'hidden' channel 
-WHITESPACE
-  :  (' ' | '\t' | '\n' | '\r' | '\f')+ 
-  ; 
+WHITESPACE:  (' ' | '\t' | '\n' | '\r' | '\f')+ -> skip; 
 
 INTLITERAL: [0-9]+;
 
