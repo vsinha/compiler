@@ -1,15 +1,16 @@
 grammar Micro;
 
-program: PROGRAM id BEGIN pgm_body END;
+program: PROGRAM id BEGIN program_body END;
 
 id: IDENTIFIER;
 
-pgm_body: ;
+program_body: ;
 
 KEYWORD
-  : 'PROGRAM'
-  | 'BEGIN'
-  | 'END'
+  : 'PROGRAM' | 'BEGIN' | 'END' | 'FUNCTION' | 'READ' 
+  | 'WRITE' | 'IF' | 'ELSIF' | 'ENDIF' | 'DO' | 'WHILE'
+  | 'CONTINUE' | 'BREAK' | 'RETURN' | 'INT' | 'VOID' 
+  | 'STRING' | 'FLOAT' | 'TRUE' | 'FALSE'
   ;
 
 
@@ -21,7 +22,7 @@ WHITESPACE
 INTLITERAL: [0-9]+;
 
 // TODO this should limit identifiers to 30 characters
-IDENTIFIER: [A-z][A-z0-9_]+;
+IDENTIFIER: [A-z_][A-z0-9_]+;
 
 OPERATOR: (':=' | '+' | '-' | '/' | '=' 
          | '!=' | '<' | '>' | '(' | ')' 
