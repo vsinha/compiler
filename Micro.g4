@@ -26,7 +26,7 @@ STRINGLITERAL: '"' (~('\n'|'\r') )*? '"';
 // TODO this should limit identifiers to 30 characters
 IDENTIFIER: [A-z_][A-z0-9_]+;
 
-OPERATOR: (':=' | '+' | '-' | '/' | '=' 
+OPERATOR: (':=' | '+' | '-' | '/' | '=' | '*'
          | '!=' | '<' | '>' | '(' | ')' 
          | ';' | ',' | '<=' | '>=');
 
