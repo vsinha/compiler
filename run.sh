@@ -1,3 +1,3 @@
 #!/bin/sh
 
-java -cp lib/antlr.jar:classes/ Micro fibonacci.micro 
+java -cp lib/antlr.jar:classes/ Micro test.micro 
