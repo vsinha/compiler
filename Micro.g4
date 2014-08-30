@@ -13,18 +13,19 @@ KEYWORD
   | 'STRING' | 'FLOAT' | 'TRUE' | 'FALSE'
   ;
 
-COMMENT: '--'(~('\r'|'\n'))* ;
+COMMENT: '--'(~('\r'|'\n'))* -> skip;
 
 WHITESPACE:  (' ' | '\t' | '\n' | '\r' | '\f')+ -> skip; 
 
 INTLITERAL: [0-9]+;
 
-FLOATLITERAL: [0-9]*\.[0-9]*;
+FLOATLITERAL: [0-9]*?['.'][0-9]*;
 
-STRINGLITERAL: '"' (~('\n'|'\r') )*? '"';
+// TODO also this needs to be limited
+STRINGLITERAL: '"'(~('\n'|'\r'))*?'"';
 
 // TODO this should limit identifiers to 30 characters
-IDENTIFIER: [A-z_][A-z0-9_]+;
+IDENTIFIER: [A-z_][A-z0-9_]*;
 
 OPERATOR: (':=' | '+' | '-' | '/' | '=' | '*'
          | '!=' | '<' | '>' | '(' | ')' 

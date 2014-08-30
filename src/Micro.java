@@ -14,7 +14,7 @@ public class Micro {
             }
             System.out.println("Token Type: " 
                     + MicroLexer.tokenNames[token.getType()]);
-            System.out.println("Value " + token.getText());
+            System.out.println("Value: " + token.getText());
         }
                
 
