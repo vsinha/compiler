@@ -26,11 +26,15 @@ public class Micro {
         parser.setErrorHandler(new BailErrorStrategy());
 
         // This line actually parses the input
+        Boolean success = true;
         try {
             ParseTree tree = parser.program();
         } catch (ParseCancellationException e) {
+            success = false;
             System.out.println("Not Accepted");
-        } finally {
+        }
+
+        if (success) {
             System.out.println("Accepted");
         }
     }
