@@ -31,11 +31,11 @@ public class Micro {
             ParseTree tree = parser.program();
         } catch (ParseCancellationException e) {
             success = false;
-            System.out.println("Not Accepted");
+            System.out.print("Not Accepted");
         }
 
         if (success) {
-            System.out.println("Accepted");
+            System.out.print("Accepted");
         }
     }
 }
