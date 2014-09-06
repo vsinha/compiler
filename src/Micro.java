@@ -30,6 +30,8 @@ public class Micro {
             ParseTree tree = parser.program();
         } catch (ParseCancellationException e) {
             System.out.println("Not Accepted");
+        } finally {
+            System.out.println("Accepted");
         }
     }
 }
