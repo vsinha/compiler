@@ -1,4 +1,5 @@
 import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.misc.ParseCancellationException;
 import org.antlr.v4.runtime.tree.*;
 
 public class Micro {
@@ -7,6 +8,8 @@ public class Micro {
         ANTLRFileStream input = new ANTLRFileStream(args[0]);
         MicroLexer lexer = new MicroLexer(input);
 
+        /*
+        // For stage1
         while(true) {
             Token token = lexer.nextToken();
             if (token.getType() == MicroLexer.EOF) {
@@ -16,17 +19,18 @@ public class Micro {
                     + MicroLexer.tokenNames[token.getType()]);
             System.out.println("Value: " + token.getText());
         }
-               
-
-        /*
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-
-        MicroParser parser = new MicroParser(tokens);
-
-        ParseTree tree = parser.program();
-        System.out.println(tree.toStringTree(parser));
         */
-        
-        
+               
+        // Set things up
+        CommonTokenStream tokens = new CommonTokenStream(lexer);
+        MicroParser parser = new MicroParser(tokens);
+        parser.setErrorHandler(new BailErrorStrategy());
+
+        // This line actually parses the input
+        try {
+            ParseTree tree = parser.program();
+        } catch (ParseCancellationException e) {
+            System.out.println("Not Accepted");
+        }
     }
 }
