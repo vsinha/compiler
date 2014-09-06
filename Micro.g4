@@ -163,19 +163,6 @@ compop
 while_stmt: 'WHILE' '(' cond ')' decl stmt_list 'ENDWHILE';
 
 
-
-/*
-KEYWORD
-  : 'PROGRAM' | 'BEGIN' | 'END' 
-  | 'FUNCTION' | 'READ' | 'WRITE' 
-  | 'IF' | 'ELSE' | 'ENDIF' 
-  | 'WHILE' | 'ENDWHILE' | 'CONTINUE' 
-  | 'BREAK' | 'RETURN' | 'INT' 
-  | 'VOID' | 'STRING' | 'FLOAT' 
-  | 'DO' | 'ELSIF' | 'TRUE' | 'FALSE'
-  ;
-*/
-
 WHITESPACE:  (' ' | '\t' | '\n' | '\r' | '\f')+ -> skip; 
 
 IDENTIFIER: [A-z_][A-z0-9_]*;
