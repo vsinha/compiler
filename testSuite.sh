@@ -1,9 +1,8 @@
 #!/bin/bash
 
-
 make clean; make compiler
 
-FILES=testcases/step2/input/*
+FILES=$(ls testcases/step2/input/ | sort -k1.5n)
 
 for f in $FILES
 do
@@ -25,5 +24,3 @@ do
     fi
     echo
 done
-
-
