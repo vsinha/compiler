@@ -1,31 +1,39 @@
 grammar Micro;
 
-/* Program */
+// Program
 
-program: PROGRAM id BEGIN pgm_body END;
+program: 'PROGRAM' id 'BEGIN' pgm_body 'END';
 
 id: IDENTIFIER;
 
 pgm_body: ;
 
 /*
-decl: string_decl_list {decl} 
-  | var_decl_list {decl}
+decl: string_decl decl 
+  | var_decl decl
   | empty
   ;
 
-string_decl_list: ;
+// Global String Declaration
+string_decl: STRING id := str;
+
+str: STRINGLITERAL;
 
 var_decl_list: ;
 */
 
 
+/*
 KEYWORD
-  : 'PROGRAM' | 'BEGIN' | 'END' | 'FUNCTION' | 'READ' | 'WRITE' 
-  | 'IF' | 'ELSE' | 'ENDIF' | 'WHILE' | 'ENDWHILE' | 'CONTINUE' 
-  | 'BREAK' | 'RETURN' | 'INT' | 'VOID' | 'STRING' | 'FLOAT' 
+  : 'PROGRAM' | 'BEGIN' | 'END' 
+  | 'FUNCTION' | 'READ' | 'WRITE' 
+  | 'IF' | 'ELSE' | 'ENDIF' 
+  | 'WHILE' | 'ENDWHILE' | 'CONTINUE' 
+  | 'BREAK' | 'RETURN' | 'INT' 
+  | 'VOID' | 'STRING' | 'FLOAT' 
   | 'DO' | 'ELSIF' | 'TRUE' | 'FALSE'
   ;
+*/
 
 WHITESPACE:  (' ' | '\t' | '\n' | '\r' | '\f')+ -> skip; 
 
