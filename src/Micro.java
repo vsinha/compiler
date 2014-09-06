@@ -4,7 +4,6 @@ import org.antlr.v4.runtime.tree.*;
 
 public class Micro {
     public static void main(String[] args) throws Exception {
-        System.out.println(args[0]);
         ANTLRFileStream input = new ANTLRFileStream(args[0]);
         MicroLexer lexer = new MicroLexer(input);
 
