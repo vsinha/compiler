@@ -4,6 +4,9 @@ make clean; make compiler
 
 FILES=$(ls testcases/step2/input/ | sort -k1.5n)
 
+let failCount=0
+let passCount=0
+
 for f in $FILES
 do
     FILENAME=${f##*/}
@@ -18,9 +21,15 @@ do
 
     if [ "$OUTPUT" = "$EXPECTEDOUTPUT" ] 
     then
-        echo "PASS"
+        printf "\033[32;1mPASS \033[0m\n"
+        ((passCount++))
     else
-       echo "FAIL"
+       printf "\033[31;1mFAIL \033[0m\n"
+       ((failCount++))
     fi
     echo
 done
+
+
+echo "Passed: " $passCount
+echo "Failed: " $failCount
