@@ -12,20 +12,20 @@ BEGIN
 		j := 0;
 		result := 0;
 		
-		DO
+		WHILE (i < 100)
 		     i := i + 1;
 		     IF (i > 69)
 		          CONTINUE;
 		     ENDIF
 		     iprime := iprime + 1;
-		     DO
+		     WHILE (j < 100)
 		          IF (j > 49)
 		               BREAK;
 		          ENDIF
 		          j := j + 1;
 	               result := result + 1;
-		     WHILE (j < 100);
-		WHILE (i < 100);
+		     ENDWHILE
+		ENDWHILE
 
 		WRITE (result);
 		WRITE (j);

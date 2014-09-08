@@ -12,12 +12,12 @@ BEGIN
 	IF (a = b)
 		
 		h:=0;
-	ELSIF (TRUE)
+	ELSE
 
-	     DO
+	     WHILE(j <= 10)
 		     a := j;
 		     j := j + 1;		
-	     WHILE(j <= 10);
+	     ENDWHILE
 
 	ENDIF
 	

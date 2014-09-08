@@ -7,15 +7,13 @@ BEGIN
 
 	FUNCTION INT F (INT n)
 	BEGIN
-
+		IF (n = 0)
+			RETURN 0;
+		ENDIF
 		IF (n > 2)
 			RETURN F(n-1)+F(n-2);
-		ELSIF (n = 0) --This is a comment
-			RETURN 0;
-		ELSIF (n = 1)
+		ELSE
 			RETURN 1;
-        ELSIF (n = 2)
-            RETURN 1;
 		ENDIF
 
 	END
@@ -28,12 +26,12 @@ BEGIN
 		READ(end);
 
 	i := 0;
-	DO
+	WHILE (i != end)
 		result := F(i);
 		WRITE (i,space);
 		WRITE (result,eol);
 		i := i + 1;	
-	WHILE (i != end);
+	ENDWHILE
 
 	END
 

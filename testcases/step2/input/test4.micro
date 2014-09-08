@@ -9,7 +9,7 @@ BEGIN
 	write (x);
 	read (y);
 	c=a+b;
-	b;
+	b;  --This line should cause a parse error
 	RETURN i;
   END
 

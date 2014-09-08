@@ -13,7 +13,7 @@ BEGIN
 	IF (a + b)
 		
 		h:=0;
-	ELSIF (TRUE)
+	ELSE
 	
 		j:=1;
 	ENDIF

@@ -12,16 +12,16 @@ BEGIN
 		k := 0;
 		result := 0;
 		
-		DO
+		WHILE (i < 100)
 		     i := i + 1;
-		     DO
+		     WHILE (j < 100)
 		          j := j + 1;
-		          DO
+		          WHILE (k < 100)
 		               k := k + 1;
 		               result := result + 1;
-		          WHILE (k < 100);
-		     WHILE (j < 100);
-		WHILE (i < 100);
+		          ENDWHILE
+		     ENDWHILE
+		ENDWHILE
 
 		WRITE (result);
 	END

@@ -12,12 +12,12 @@ BEGIN
      i := 10;
      j := 10;
 	
-     DO
+     WHILE (b <= (i - 1))
           b := b + 1;
-          DO
+          WHILE (a <= (j - 1))
                a := a + 1;
-          WHILE (a <= (j - 1));
-     WHILE (b <= (i - 1));
+          ENDWHILE
+     ENDWHILE
 
      WRITE(a);
 
