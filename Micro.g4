@@ -3,7 +3,10 @@ grammar Micro;
 // Program
 program: 'PROGRAM' id 'BEGIN' pgm_body 'END';
 
-id: IDENTIFIER;
+id returns [String identifier]
+  : IDENTIFIER { 
+      $identifier = (String)$IDENTIFIER.text; 
+    };
 
 pgm_body
   : decl func_declarations;
@@ -20,11 +23,14 @@ string_decl: 'STRING' id ':=' str ';';
 str: STRINGLITERAL;
 
 // Variable Declaration
-var_decl: var_type id_list ';';
+var_decl
+  : var_type id_list ';'
+    { }
+  ;
 
-var_type
-  : 'FLOAT' 
-  | 'INT'
+var_type returns [Type type]
+  : 'FLOAT' { }
+  | 'INT' { System.out.println("defined an int"); }
   ;
 
 any_type
@@ -32,10 +38,31 @@ any_type
   | 'VOID'
   ;
 
-id_list: id id_tail;
+id_list returns [ArrayList<String> ids]
+  : id {
+    }
+    id_tail {
+      // we've gotten back an arraylist of the
+      // tail ids, prepend our first id to 
+      // finish building the list
+      System.out.println($id_tail);
+      /*
+      $id_tail.ids_tail.add(0, $id.text);
+      $ids = $ids_tail;
+      System.out.println($ids);
+      */
+    }
+    ;
 
-id_tail
-  : ',' id id_tail 
+id_tail returns [ArrayList<String> ids_tail]
+  : {
+      $ids_tail = new ArrayList<String>();
+    }
+    ',' 
+    id {
+      $ids_tail.append($id.text);
+    } 
+    id_tail 
   | // empty
   ;
 
