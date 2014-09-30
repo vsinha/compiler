@@ -26,6 +26,7 @@ do
     else
        printf "\033[31;1mFAIL \033[0m\n"
        ((failCount++))
+       exit
     fi
     echo
 done
