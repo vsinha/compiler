@@ -18,11 +18,10 @@ public class Micro {
             ParseTree tree = parser.program();
         } catch (ParseCancellationException e) {
             success = false;
-            System.out.print("Not accepted");
         }
 
         if (success) {
-            System.out.print("Accepted");
+            parser.symbolTree.printTree();
         }
     }
 }
