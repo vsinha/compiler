@@ -25,12 +25,15 @@ str: STRINGLITERAL;
 // Variable Declaration
 var_decl
   : var_type id_list ';'
-    { }
+    { 
+    System.out.println("id list: " + $id_list.ids);
+    }
   ;
 
 var_type returns [Type type]
   : 'FLOAT' { }
-  | 'INT' { System.out.println("defined an int"); }
+  | 'INT' { 
+    }
   ;
 
 any_type
@@ -39,31 +42,26 @@ any_type
   ;
 
 id_list returns [ArrayList<String> ids]
-  : id {
-    }
+  : id 
     id_tail {
-      // we've gotten back an arraylist of the
-      // tail ids, prepend our first id to 
-      // finish building the list
-      System.out.println($id_tail);
-      /*
-      $id_tail.ids_tail.add(0, $id.text);
-      $ids = $ids_tail;
-      System.out.println($ids);
-      */
+      $ids = $id_tail.ids_list;
+
+      // add the first variable
+      $ids.add(0, $id.text);
     }
     ;
 
-id_tail returns [ArrayList<String> ids_tail]
-  : {
-      $ids_tail = new ArrayList<String>();
+id_tail returns [ArrayList<String> ids_list]
+  : ',' 
+    id 
+    recurse_tail = id_tail {
+      $ids_list = $recurse_tail.ids_list;
+      $ids_list.add(0, $id.text);
     }
-    ',' 
-    id {
-      $ids_tail.append($id.text);
-    } 
-    id_tail 
-  | // empty
+  | // empty (base case)
+    { 
+      $ids_list = new ArrayList<String>(); 
+    }
   ;
 
 // Function Parameter list
