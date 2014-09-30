@@ -1,7 +1,20 @@
 grammar Micro;
 
+@members {
+  public SymbolTableTree symbolTree = new SymbolTableTree();
+}
+
 // Program
-program: 'PROGRAM' id 'BEGIN' pgm_body 'END';
+program
+  : 'PROGRAM' 
+    id 
+    'BEGIN' 
+    {
+    // GLOBAL scope table is created implicitly
+    // when first SymbolTableTree is initialized
+    }
+    pgm_body 
+    'END';
 
 id returns [String identifier]
   : IDENTIFIER { 
@@ -18,7 +31,12 @@ decl
   ;
 
 // Global String Declaration
-string_decl: 'STRING' id ':=' str ';';
+string_decl
+  : 'STRING' id ':=' str ';'
+  {
+    symbolTree.addString($id.text, $str.text);
+  }
+  ;
 
 str: STRINGLITERAL;
 
@@ -26,14 +44,15 @@ str: STRINGLITERAL;
 var_decl
   : var_type id_list ';'
     { 
-    System.out.println("id list: " + $id_list.ids);
+    // add to symbol table in current scope
+    symbolTree.addVariables($id_list.ids, $var_type.text);
+
     }
   ;
 
-var_type returns [Type type]
-  : 'FLOAT' { }
-  | 'INT' { 
-    }
+var_type 
+  : 'FLOAT'
+  | 'INT'  
   ;
 
 any_type
@@ -70,7 +89,12 @@ param_decl_list
   | // empty
   ;
 
-param_decl: var_type id;
+param_decl
+  : var_type id 
+    { 
+      symbolTree.addVariable($id.text, $var_type.text);
+    }
+  ;
 
 param_decl_tail
   : ',' param_decl param_decl_tail
@@ -84,7 +108,15 @@ func_declarations
   ;
 
 func_decl
-  : 'FUNCTION' any_type id '(' param_decl_list ')' 'BEGIN' func_body 'END';
+  : 'FUNCTION' 
+    any_type id { symbolTree.enterScope($id.text); }
+    '(' 
+    param_decl_list 
+    ')' 
+    'BEGIN' 
+    func_body 
+    'END' { symbolTree.exitScope(); }
+    ;
 
 func_body: decl stmt_list;
 
@@ -165,11 +197,18 @@ mulop
 
 // Complex Statements and Condition
 if_stmt
-  : 'IF' '(' cond ')' decl stmt_list else_part 'ENDIF'
+  : 'IF' { symbolTree.enterScope(); } 
+    '(' cond ')' 
+    decl 
+    stmt_list  { symbolTree.exitScope(); }
+    else_part 
+    'ENDIF' 
   ;
 
 else_part
-  : 'ELSE' decl stmt_list
+  : 'ELSE' { symbolTree.enterScope(); }
+    decl 
+    stmt_list { symbolTree.exitScope(); }
   | // empty
   ;
 
@@ -185,7 +224,13 @@ compop
   ;
 
 // While
-while_stmt: 'WHILE' '(' cond ')' decl stmt_list 'ENDWHILE';
+while_stmt
+  : 'WHILE' { symbolTree.enterScope(); }
+    '(' cond ')' 
+    decl 
+    stmt_list 
+    'ENDWHILE' { symbolTree.exitScope(); }
+  ;
 
 
 WHITESPACE:  (' ' | '\t' | '\n' | '\r' | '\f')+ -> skip; 
