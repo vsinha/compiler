@@ -7,19 +7,6 @@ public class Micro {
         ANTLRFileStream input = new ANTLRFileStream(args[0]);
         MicroLexer lexer = new MicroLexer(input);
 
-        /*
-        // For stage1
-        while(true) {
-            Token token = lexer.nextToken();
-            if (token.getType() == MicroLexer.EOF) {
-                break;
-            }
-            System.out.println("Token Type: " 
-                    + MicroLexer.tokenNames[token.getType()]);
-            System.out.println("Value: " + token.getText());
-        }
-        */
-               
         // Set things up
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         MicroParser parser = new MicroParser(tokens);
@@ -31,7 +18,7 @@ public class Micro {
             ParseTree tree = parser.program();
         } catch (ParseCancellationException e) {
             success = false;
-            System.out.print("Not Accepted");
+            System.out.print("Not accepted");
         }
 
         if (success) {
