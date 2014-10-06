@@ -24,8 +24,8 @@ public class SymbolTableTree {
         }
     }
 
-    SymbolTable global; // top level scope, has no parents
-    SymbolTable currentScope;
+    SymbolTable global = null; // top level scope, has no parents
+    SymbolTable currentScope = null;
     int blockCount = 1;
 
     public SymbolTableTree () { 
