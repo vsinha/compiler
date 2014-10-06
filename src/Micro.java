@@ -4,24 +4,26 @@ import org.antlr.v4.runtime.tree.*;
 
 public class Micro {
     public static void main(String[] args) throws Exception {
-        ANTLRFileStream input = new ANTLRFileStream(args[0]);
-        MicroLexer lexer = new MicroLexer(input);
-
-        // Set things up
-        CommonTokenStream tokens = new CommonTokenStream(lexer);
-        MicroParser parser = new MicroParser(tokens);
-        parser.setErrorHandler(new BailErrorStrategy());
-
-        // This line actually parses the input
-        Boolean success = true;
         try {
-            ParseTree tree = parser.program();
-        } catch (ParseCancellationException e) {
-            success = false;
-        }
+            // Set things up
+            ANTLRFileStream input = new ANTLRFileStream(args[0]);
+            MicroLexer lexer = new MicroLexer(input);
+            CommonTokenStream tokens = new CommonTokenStream(lexer);
 
-        if (success) {
-            parser.symbolTree.printTree();
+            MicroParser parser = new MicroParser(tokens);
+            parser.setErrorHandler(new BailErrorStrategy());
+
+            ParseTree tree = parser.program();
+            //parser.symbolTree.printTree();
+
+            ParseTreeWalker walker = new ParseTreeWalker();
+            MicroListener listener = new MicroListener();
+
+            // initiate walk of tree with listener
+            walker.walk(listener, tree); 
+
+        } catch (ParseCancellationException e) {
+            System.out.println(e);
         }
     }
 }
