@@ -9,6 +9,7 @@ public class Id {
         this.value = null;
     }
 
+    // for string variables
     public Id (String name, String type, String value) {
         this.name = name;
         this.type = type;
