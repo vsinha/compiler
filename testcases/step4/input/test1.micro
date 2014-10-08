@@ -1,0 +1,12 @@
+PROGRAM test
+BEGIN
+
+INT a;
+FLOAT b, c;
+
+    FUNCTION VOID main()
+    BEGIN
+    c := a + b;
+    END
+
+END

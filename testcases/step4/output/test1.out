@@ -1,0 +1,2 @@
+ADDF a b $T1
+STOREF $T1 c

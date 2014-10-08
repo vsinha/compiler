@@ -7,4 +7,11 @@ public class MicroIRListener extends MicroBaseListener {
     public void visitTerminal(TerminalNode node) {
         System.out.println(node);
     }
+
+    @Override
+    public void enterAssign_stmt(
+            MicroParser.Assign_stmtContext ctx) {
+        
+        System.out.println(ctx);
+    }
 }
