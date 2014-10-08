@@ -17,7 +17,7 @@ public class Micro {
             //parser.symbolTree.printTree();
 
             ParseTreeWalker walker = new ParseTreeWalker();
-            MicroListener listener = new MicroListener();
+            MicroIRListener listener = new MicroIRListener();
 
             // initiate walk of tree with listener
             walker.walk(listener, tree); 
