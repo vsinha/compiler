@@ -2,11 +2,11 @@ PROGRAM test
 BEGIN
 
 INT a;
-FLOAT b, c;
+FLOAT b, c, d;
 
     FUNCTION VOID main()
     BEGIN
-    c := a + b;
+    c := a + b + d;
     END
 
 END
