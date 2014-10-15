@@ -24,7 +24,8 @@ public class NodeProperties {
   
     @Override public String toString() {
         return new String(text + " " 
-                + operator + " " + leftNode
-                + Ltext + " " + Rtext);
+               // + operator + " " + leftNode
+               // + Ltext + " " + Rtext
+                );
     }
 }

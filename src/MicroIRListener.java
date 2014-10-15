@@ -33,7 +33,7 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterAddop(
             MicroParser.AddopContext ctx) {
-        System.out.println("addop: " + ctx.getText());
+        //System.out.println("addop: " + ctx.getText());
     }
 
     @Override public void exitAddop(
@@ -43,7 +43,6 @@ public class MicroIRListener extends MicroBaseListener {
 
         parentNodeProps.operator = ctx.getText();
     }
-
 
     @Override public void enterPrimary(
             MicroParser.PrimaryContext ctx) {
@@ -57,8 +56,13 @@ public class MicroIRListener extends MicroBaseListener {
     }
 
     public void passToParent(ParserRuleContext ctx, String str){
-        NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-        parentNodeProps.text = parentNodeProps.text + " " + str;
+        ParserRuleContext parent = ctx.getParent();
+        if (parent != null) {
+          NodeProperties parentNodeProps = ptp.get(ctx.getParent());
+          if (str != "null") {
+            parentNodeProps.text = parentNodeProps.text + " " + str;
+          }
+        }
     }
 
     @Override public void enterPostfix_expr(
@@ -101,6 +105,11 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void enterEveryRule(ParserRuleContext ctx){
         ptp.put(ctx, new NodeProperties());
     }
+    
+    @Override public void exitEveryRule(ParserRuleContext ctx){
+        ptp.put(ctx, new NodeProperties());
+        passToParent(ctx, ctx.getText());
+    }
 
     @Override public void enterFactor(
             MicroParser.FactorContext ctx) {
@@ -126,7 +135,7 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitExpr_prefix(
             MicroParser.Expr_prefixContext ctx) {
         System.out.println("expr_prefix: " + ctx.getText());
-        System.out.println("exit expr_prefix" + ptp.get(ctx));
-        ptp.get(ctx.getParent()).leftNode = ptp.get(ctx).toString();
+        System.out.println("exit expr_prefix " + ptp.get(ctx));
+        //ptp.get(ctx.getParent()).leftNode = ptp.get(ctx).toString();
     }
 }
