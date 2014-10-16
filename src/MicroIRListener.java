@@ -136,15 +136,6 @@ public class MicroIRListener extends MicroBaseListener {
         symbolTree.exitScope();
     }
 
-    @Override public void visitTerminal(TerminalNode node) {
-        //System.out.println(node);
-    }
-
-    @Override public void exitAssign_stmt(
-            MicroParser.Assign_stmtContext ctx) {
-        //System.out.println(ctx);
-    }
-
     @Override public void enterAssign_expr(
             MicroParser.Assign_exprContext ctx) {
 
@@ -168,8 +159,7 @@ public class MicroIRListener extends MicroBaseListener {
 
         System.out.println(storeOp + " " + 
                 ptp.get(ctx).data.get("register") + " " +
-                Lvalue
-                );
+                Lvalue);
     }
 
     @Override public void exitId(
@@ -185,65 +175,14 @@ public class MicroIRListener extends MicroBaseListener {
         }
     }
 
-    @Override public void enterAddop(
-            MicroParser.AddopContext ctx) {
-        //System.out.println("addop: " + ctx.getText());
-    }
-
     @Override public void exitAddop(
             MicroParser.AddopContext ctx) {
-        System.out.println("addop: " + ctx.getText());
-        
         addNodeProp(ctx, "addop", ctx.getText()); 
-    }
-
-    public void addNodeProp(ParserRuleContext ctx, 
-            String key, String value) {
-        ptp.get(ctx).data.put(key, value);
     }
 
     @Override public void exitPrimary(
             MicroParser.PrimaryContext ctx) {
-        System.out.println("primary: " + ctx.getText());
-        //setParentLREntries(ctx, ctx.getText());
         addNodeProp(ctx, "primary", ctx.getText());
-
-    }
-
-    public void passToParent(ParserRuleContext ctx, String str) {
-        ParserRuleContext parent = ctx.getParent();
-        if (parent != null) {
-            NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-            if (str != "null") {
-                parentNodeProps.text = parentNodeProps.text + " " + str;
-            }
-        }
-    }
-
-    @Override public void enterPostfix_expr(
-            MicroParser.Postfix_exprContext ctx) {
-        //System.out.println("postfix: " + ctx.getText());
-        ptp.put(ctx, new NodeProperties());
-    }
-
-    @Override public void exitPostfix_expr(
-            MicroParser.Postfix_exprContext ctx) {
-        //System.out.println("postfix: " + ctx.getText());
-        System.out.println("postfix2: " + ptp.get(ctx));
-        //ptp.get(ctx.getParent()).Ltext = ptp.get(ctx).Ltext;
-        //ptp.get(ctx.getParent()).Rtext = ptp.get(ctx).Rtext;
-        //setParentLREntries(ctx, ptp.get(ctx).text);
-    }
-
-    @Override public void enterFactor_prefix(
-            MicroParser.Factor_prefixContext ctx) {
-        //System.out.println("factor: " + ctx.getText());
-        //System.out.println("factor2: " + ptp.get(ctx));
-    }
-
-    @Override public void exitFactor_prefix(
-            MicroParser.Factor_prefixContext ctx) {
-        System.out.println("factor4: " + ptp.get(ctx));
     }
 
     @Override public void enterEveryRule(ParserRuleContext ctx){
@@ -288,15 +227,11 @@ public class MicroIRListener extends MicroBaseListener {
         }
     }
 
-    @Override public void enterExpr(MicroParser.ExprContext ctx) {
-        //System.out.println("expr: " + ctx.getText());
-    }
-
     @Override public void exitExpr(MicroParser.ExprContext ctx) {
-        System.out.println("expr: " + ctx.getText());
+        //System.out.println("expr: " + ctx.getText());
 
         NodeProperties np = ptp.get(ctx);
-        System.out.println("exit expr: " + np.text);
+        //System.out.println("exit expr: " + np.text);
 
         // pass up the last register if it exists
         if (ptp.get(ctx).data.containsKey("register")) {
@@ -306,16 +241,22 @@ public class MicroIRListener extends MicroBaseListener {
         }
     }
     
-    @Override public void enterExpr_prefix(
-            MicroParser.Expr_prefixContext ctx) {
-        //System.out.println("expr_prefix: " + ctx.getText());
-    }
-
     @Override public void exitExpr_prefix(
             MicroParser.Expr_prefixContext ctx) {
-        //System.out.println("exit  expr_prefix: " + ctx.getText());
-        System.out.println("exit2 expr_prefix: " + ptp.get(ctx));
-        //ptp.get(ctx.getParent()).leftNode = ptp.get(ctx).toString();
+        //System.out.println("exit2 expr_prefix: " + ptp.get(ctx));
         NodeProperties parentProps = ptp.get(ctx.getParent());
+    }
+
+    @Override public void exitCompop(MicroParser.CompopContext ctx) {
+        addNodeProp(ctx, "compop", ctx.getText());
+    }
+
+    @Override public void exitCond(MicroParser.CondContext ctx) {
+        System.out.println( 
+          lookupOpcode(ptp.get(ctx.getChild(1)).data.get("compop")) + " " + 
+          ptp.get(ctx.getChild(0)).data.get("register") + " " + 
+          ptp.get(ctx.getChild(2)).data.get("register") + " " +
+          getNewLabel()
+        );
     }
 }
