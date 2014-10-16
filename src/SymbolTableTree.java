@@ -38,13 +38,13 @@ public class SymbolTableTree {
     }
 
     // come up with a "BLOCK %d" name 
-    public void enterScope() {
-        enterScope("BLOCK " + blockCount);
+    public void createScope() {
+        createScope("BLOCK " + blockCount);
         currentScope.scopeType = "block";
         blockCount += 1;
     }
 
-    public void enterScope(String scopeName) {
+    public void createScope(String scopeName) {
         SymbolTable st = new SymbolTable(scopeName);
         st.scopeType = "function";
         st.parent = currentScope;
