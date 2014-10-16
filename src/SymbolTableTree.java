@@ -8,6 +8,8 @@ public class SymbolTableTree {
         SymbolTable parent;
         ArrayList<SymbolTable> children;
         LinkedHashMap<String, Id> table;
+        
+        int childIndex = 0;
 
         public SymbolTable (String scopeName) {
             this.scopeName = scopeName;
@@ -50,7 +52,29 @@ public class SymbolTableTree {
         st.parent.children.add(st);
     }
 
+    public Id lookup(String varName) {
+        return _lookup(currentScope, varName);
+    }
+
+    private Id _lookup(SymbolTable scope, String varName) {
+        if (scope.table.containsKey(varName)) {
+            System.out.println("looking up " + varName);
+            return scope.table.get(varName);
+        } else {
+            // recurse up to find it
+            return _lookup(scope.parent, varName);
+        }
+    }
+
+    public void enterScopeSequentially() {
+        currentScope = currentScope.children.get(currentScope.childIndex);
+
+        // increment
+        currentScope.childIndex += 1;
+    }
+
     public void exitScope() {
+        // move up a level
         currentScope = currentScope.parent;
     }
 
@@ -130,5 +154,4 @@ public class SymbolTableTree {
             _printTree(child);
         }
     }
-
 }
