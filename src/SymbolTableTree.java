@@ -58,7 +58,7 @@ public class SymbolTableTree {
 
     private Id _lookup(SymbolTable scope, String varName) {
         if (scope.table.containsKey(varName)) {
-            System.out.println("looking up " + varName);
+            //System.out.println("looking up " + varName);
             return scope.table.get(varName);
         } else {
             // recurse up to find it
