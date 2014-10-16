@@ -39,6 +39,73 @@ public class MicroIRListener extends MicroBaseListener {
         return new String("$T" + registerNumber);
     }
 
+    private String lookupOpcode(String operator) {
+        switch (operator) {
+            case ">":
+                return "GT";
+            case "<":
+                return "LT";
+            case ">=":
+                return "GE";
+            case "<=":
+                return "LE";
+            case "!=":
+                return "NE";
+            case "=":
+                return "EQ";
+            default:
+                return "compareOpERROR";
+        }
+    }
+
+    private String lookupOpcode(
+            String operator, String type) {
+        // look up the opcode for that var type
+        if (operator.equals("+")) {
+            if (type.equals("INT"))
+                return "ADDI";
+            if (type.equals("FLOAT"))
+                return "ADDF";
+        }
+
+        if (operator.equals("-")) {
+            if (type.equals("INT"))
+                return "SUBI";
+            if (type.equals("FLOAT"))
+                return "SUBF";
+        }
+
+        if (operator.equals("*")) {
+            if (type.equals("INT"))
+                return "MULI";
+            if (type.equals("FLOAT"))
+                return "MULF";
+        }
+
+        if (operator.equals("/")) {
+            if (type.equals("INT"))
+                return "DIVI";
+            if (type.equals("FLOAT"))
+                return "DIFV";
+        }
+        return "ERROR";
+    }
+
+    public void addNodeProp(ParserRuleContext ctx, 
+            String key, String value) {
+        ptp.get(ctx).data.put(key, value);
+    }
+
+    public void passToParent(ParserRuleContext ctx, String str) {
+        ParserRuleContext parent = ctx.getParent();
+        if (parent != null) {
+            NodeProperties parentNodeProps = ptp.get(ctx.getParent());
+            if (str != "null") {
+                parentNodeProps.text = parentNodeProps.text + " " + str;
+            }
+        }
+    }
+
     @Override public void enterIf_stmt(
             MicroParser.If_stmtContext ctx) {
         symbolTree.enterScopeSequentially();
@@ -195,44 +262,12 @@ public class MicroIRListener extends MicroBaseListener {
         }
     }
 
-    private String lookupOpcode(
-            String operator, String type) {
-        // look up the opcode for that var type
-        if (operator.equals("+")) {
-            if (type.equals("INT"))
-                return "ADDI";
-            if (type.equals("FLOAT"))
-                return "ADDF";
-        }
-
-        if (operator.equals("-")) {
-            if (type.equals("INT"))
-                return "SUBI";
-            if (type.equals("FLOAT"))
-                return "SUBF";
-        }
-
-        if (operator.equals("*")) {
-            if (type.equals("INT"))
-                return "MULI";
-            if (type.equals("FLOAT"))
-                return "MULF";
-        }
-
-        if (operator.equals("/")) {
-            if (type.equals("INT"))
-                return "DIVI";
-            if (type.equals("FLOAT"))
-                return "DIFV";
-        }
-        return "ERROR";
-    }
-
     @Override public void exitFactor(
             MicroParser.FactorContext ctx) {
-        //check the expr_prefix which is an already-parsed child of the parent node
+        // check the expr_prefix which is an already-parsed 
+        // child of the parent node
         NodeProperties expr_prefix = ptp.get(ctx.getParent().getChild(0));
-        System.out.println("exit factor expr_prefix: " + expr_prefix);
+        //System.out.println("exit factor expr_prefix: " + expr_prefix);
 
         if (!expr_prefix.toString().isEmpty()) {
           // generate add IR
