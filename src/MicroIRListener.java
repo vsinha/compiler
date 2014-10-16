@@ -5,12 +5,27 @@ public class MicroIRListener extends MicroBaseListener {
 
     SymbolTableTree symbolTree;
     ParseTreeProperty<NodeProperties> ptp;
+
+    // number of most recent temp register generated
     int registerNumber;
+    // and of most recent label generated
+    int labelNumber;
     
     public MicroIRListener(SymbolTableTree symbolTree) {
         this.symbolTree = symbolTree;
         this.ptp = new ParseTreeProperty<NodeProperties>();
         this.registerNumber = 0;
+        this.labelNumber = 0;
+        System.out.println();
+    }
+    
+    private String getNewLabel() {
+        labelNumber += 1;
+        return getLabel();
+    }
+
+    private String getLabel() {
+        return new String("label" + labelNumber);
     }
 
     private String getNewRegister(String type) {
