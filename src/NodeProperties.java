@@ -1,11 +1,9 @@
+import java.util.LinkedHashMap;
+import java.util.Set;
+
 public class NodeProperties {
     public String text = null;
-    public String Ltext = null;
-    public String Rtext = null;
-    public String leftNode = null;
-    public String operator = null;
-    public String mostRecentTempRegister = null;
-    public String IRcode = null;
+    public LinkedHashMap<String, String> data = new LinkedHashMap<>();
 
     public NodeProperties() {
     }
@@ -14,18 +12,20 @@ public class NodeProperties {
         this.text = text;
     }
 
-    public void setLtext(String text) {
-        this.Ltext = text;
-    }
-  
-    public void setRtext(String text) {
-        this.Rtext = text;
-    }
-  
     @Override public String toString() {
-        return new String(text + " " 
-               // + operator + " " + leftNode
-               // + Ltext + " " + Rtext
-                );
+        StringBuilder str = new StringBuilder();
+        Set<String> keys = data.keySet();
+
+        if (keys.size() > 0) {
+            str.append(text);
+            str.append(" - ");
+            for (String key : keys) {
+                str.append(key);
+                str.append(": ");
+                str.append(data.get(key));
+                str.append(", ");
+            }
+        }
+        return str.toString();
     }
 }
