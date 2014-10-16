@@ -2,13 +2,12 @@ import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
 
 public class MicroIRListener extends MicroBaseListener {
-    SymbolTableTree tree;
 
-    // This store information about nodes we've visited.
+    SymbolTableTree symbolTree;
     ParseTreeProperty<NodeProperties> ptp;
     
-    public MicroIRListener(SymbolTableTree tree) {
-        this.tree = tree;
+    public MicroIRListener(SymbolTableTree symbolTree) {
+        this.symbolTree = symbolTree;
         this.ptp = new ParseTreeProperty<NodeProperties>();
     }
 
