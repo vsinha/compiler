@@ -109,7 +109,7 @@ func_declarations
 
 func_decl
   : 'FUNCTION' 
-    any_type id { symbolTree.enterScope($id.text); }
+    any_type id { symbolTree.createScope($id.text); }
     '(' 
     param_decl_list 
     ')' 
@@ -197,7 +197,7 @@ mulop
 
 // Complex Statements and Condition
 if_stmt
-  : 'IF' { symbolTree.enterScope(); } 
+  : 'IF' { symbolTree.createScope(); } 
     '(' cond ')' 
     decl 
     stmt_list  { symbolTree.exitScope(); }
@@ -206,7 +206,7 @@ if_stmt
   ;
 
 else_part
-  : 'ELSE' { symbolTree.enterScope(); }
+  : 'ELSE' { symbolTree.createScope(); }
     decl 
     stmt_list { symbolTree.exitScope(); }
   | // empty
@@ -225,7 +225,7 @@ compop
 
 // While
 while_stmt
-  : 'WHILE' { symbolTree.enterScope(); }
+  : 'WHILE' { symbolTree.createScope(); }
     '(' cond ')' 
     decl 
     stmt_list 
