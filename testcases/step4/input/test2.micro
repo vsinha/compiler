@@ -1,0 +1,15 @@
+PROGRAM test
+BEGIN
+    FUNCTION VOID main()
+    BEGIN
+    INT a, b;
+    a := 2;
+
+    IF (a = 1)
+      b := 1;
+    ELSE
+      b := 2;
+    ENDIF
+
+    END
+END
