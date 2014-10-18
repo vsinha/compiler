@@ -16,9 +16,14 @@ public class Micro {
             ParseTree tree = parser.program();
             //parser.symbolTree.printTree();
 
+            IRLinkedList ll = new IRLinkedList();
+
             ParseTreeWalker walker = new ParseTreeWalker();
             MicroIRListener listener 
-                 = new MicroIRListener(parser.symbolTree);
+                 = new MicroIRListener(parser.symbolTree,
+                         ll);
+
+            System.out.println(listener.ll);
 
             // initiate walk of tree with listener
             walker.walk(listener, tree); 
