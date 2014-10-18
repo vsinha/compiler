@@ -7,18 +7,20 @@ public class MicroIRListener extends MicroBaseListener {
     ParseTreeProperty<NodeProperties> ptp;
 
     // store all our created code nodes to this linked list
-    IRLinkedList ll = new IRLinkedList();
+    public IRLinkedList ll; 
 
     // number of most recent temp register generated
     int registerNumber;
     // and of most recent label generated
     int labelNumber;
     
-    public MicroIRListener(SymbolTableTree symbolTree) {
+    public MicroIRListener(SymbolTableTree symbolTree, 
+            IRLinkedList ll) {
         this.symbolTree = symbolTree;
         this.ptp = new ParseTreeProperty<NodeProperties>();
         this.registerNumber = 0;
         this.labelNumber = 0;
+        this.ll = new IRLinkedList();
         System.out.println();
     }
     
