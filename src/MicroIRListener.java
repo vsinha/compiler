@@ -6,6 +6,9 @@ public class MicroIRListener extends MicroBaseListener {
     SymbolTableTree symbolTree;
     ParseTreeProperty<NodeProperties> ptp;
 
+    // store all our created code nodes to this linked list
+    IRLinkedList ll = new IRLinkedList();
+
     // number of most recent temp register generated
     int registerNumber;
     // and of most recent label generated
@@ -157,9 +160,9 @@ public class MicroIRListener extends MicroBaseListener {
             storeOp = "STOREF";
         }
 
-        System.out.println(storeOp + " " + 
-                ptp.get(ctx).data.get("register") + " " +
-                Lvalue);
+        ll.addNode(storeOp + " " + 
+                   ptp.get(ctx).data.get("register") + " " +
+                   Lvalue);
     }
 
     @Override public void exitId(
@@ -216,8 +219,7 @@ public class MicroIRListener extends MicroBaseListener {
           String opcode = lookupOpcode(
                   expr_prefix.data.get("addop"), type);
 
-          System.out.println(
-                  opcode + " "
+          ll.addNode(opcode + " "
                  + expr_prefix.data.get("primary") + " "
                  + ptp.get(ctx).data.get("primary") + " "
                  + temp
@@ -252,7 +254,7 @@ public class MicroIRListener extends MicroBaseListener {
     }
 
     @Override public void exitCond(MicroParser.CondContext ctx) {
-        System.out.println( 
+        ll.addNode( 
           lookupOpcode(ptp.get(ctx.getChild(1)).data.get("compop")) + " " + 
           ptp.get(ctx.getChild(0)).data.get("register") + " " + 
           ptp.get(ctx.getChild(2)).data.get("register") + " " +
