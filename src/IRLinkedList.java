@@ -19,27 +19,23 @@ public class IRLinkedList {
     }
 
     public IRLinkedList() {
-        head = null;
-        tail = null;
+        head = new Node("");
+        tail = head;
     }
 
     public void addNode(String code) {
         Node newNode = new Node(code);
-        System.out.println(code);
 
-        if (head == null && tail == null) { // no nodes in list
-          head = newNode;
-          tail = newNode;
-        } else { // put the node at the end of the list
-          newNode.prev = tail;
-          tail.next = newNode;
-          tail = newNode;
-        }
+        newNode.prev = tail;
+        tail.next = newNode;
+        tail = newNode;
     }
 
     @Override
     public String toString() {
-        return head + _toString(head.next);
+        System.out.println("here");
+        
+        return "test" + _toString(head.next);
     }
 
     private String _toString(Node current) {
