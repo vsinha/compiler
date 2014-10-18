@@ -33,16 +33,14 @@ public class IRLinkedList {
 
     @Override
     public String toString() {
-        System.out.println("here");
-        
-        return "test" + _toString(head.next);
+        return _toString(head.next);
     }
 
     private String _toString(Node current) {
         if (current == null) {
             return "";
         } else {
-           return current + _toString(current.next);
+           return current + "\n" + _toString(current.next);
         }
     }
 }

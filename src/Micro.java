@@ -23,10 +23,11 @@ public class Micro {
                  = new MicroIRListener(parser.symbolTree,
                          ll);
 
-            System.out.println(listener.ll);
 
             // initiate walk of tree with listener
             walker.walk(listener, tree); 
+
+            System.out.println(listener.ll);
 
         } catch (ParseCancellationException e) {
             System.out.println(e);
