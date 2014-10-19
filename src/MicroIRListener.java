@@ -247,6 +247,7 @@ public class MicroIRListener extends MicroBaseListener {
 
         String Lvalue = ptp.get(ctx).data.get("assign_Lvalue");
         String storeOp = "ERROR";
+        System.out.println(Lvalue);
         String LvalueType = symbolTree.lookup(Lvalue).type;
 
         if (LvalueType.equals("INT")) {
@@ -263,12 +264,11 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitId(
             MicroParser.IdContext ctx) {
         NodeProperties parentNodeProps = ptp.get(ctx.getParent());
+        System.out.println("here: " + ctx.getParent().getText());
         
         // if we're directly the child of an assign statement
-        if (parentNodeProps.data.containsKey("assign_Lvalue") 
-           // && parentNodeProps.data.get("assign_Lvalue") == null
-                // ^^ might need this if we run into bugs later
-            ) {
+        if (ctx.getParent().getChild(1) != null
+                && ctx.getParent().getChild(1).getText().equals(":=")) {
               addNodeProp(ctx.getParent(), "assign_Lvalue", ctx.getText());
         }
     }
@@ -284,6 +284,11 @@ public class MicroIRListener extends MicroBaseListener {
         addNodeProp(ctx, "mulop", ctx.getText()); 
     }
 
+    @Override public void enterPrimary(
+            MicroParser.PrimaryContext ctx) {
+        System.out.println("entering primary: " + ctx.getText());
+    }
+
     @Override public void exitPrimary(
             MicroParser.PrimaryContext ctx) {
         if (ctx.getChild(0).getText().equals("(")) {
@@ -294,7 +299,7 @@ public class MicroIRListener extends MicroBaseListener {
         } else {
             // pretend to have loaded it to a register
             if(isInteger(ctx.getText())) {
-                getNewRegister("INT");
+                //getNewRegister("INT");
             }
             addNodeProp(ctx, "primary", ctx.getText());
         }
@@ -365,7 +370,7 @@ public class MicroIRListener extends MicroBaseListener {
                         + temp
                         );
 
-                addNodeProp(ctx, "register", temp);
+                addNodeProp(ctx, "primary", temp);
             }
         } else { // addop
             NodeProperties expr_prefix = ptp.get(ctx.getParent().getChild(0));
@@ -409,6 +414,7 @@ public class MicroIRListener extends MicroBaseListener {
         NodeProperties np = ptp.get(ctx);
 
         // pass up the last register if it exists
+        /*
         if (ptp.get(ctx).data.containsKey("register")) {
             System.out.println ("register -> primary");
           addNodeProp(ctx, "primary", ptp.get(ctx).data.get("register"));
@@ -416,6 +422,7 @@ public class MicroIRListener extends MicroBaseListener {
             System.out.println ("primary -> register");
           addNodeProp(ctx, "register", ptp.get(ctx).data.get("primary"));
         }
+        */
     }
     
     @Override public void exitExpr_prefix(
