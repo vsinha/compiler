@@ -448,4 +448,25 @@ public class MicroIRListener extends MicroBaseListener {
           label
         );
     }
+
+    @Override public void enterId_list(MicroParser.Id_listContext ctx) {
+        for (String id : ctx.ids){
+            if(ctx.getParent().getChild(0).getText().equals("WRITE")){
+
+                if (symbolTree.lookup(id).type.equals("INT")){
+                    ll.addNode("WRITEI " + id);
+                }else if (symbolTree.lookup(id).type.equals("FLOAT")) {
+                    ll.addNode("WRITEF " + id);
+                }else if (id.equals("newline")) {
+                    ll.addNode("WRITES " + id);
+                }
+            }else if (ctx.getParent().getChild(0).getText().equals("READ")) {
+                if (symbolTree.lookup(id).type.equals("INT")){
+                    ll.addNode("READI " + id);
+                }else if (symbolTree.lookup(id).type.equals("FLOAT")) {
+                    ll.addNode("READF " + id);
+                }
+            }
+        }
+    }
 }
