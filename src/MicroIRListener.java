@@ -11,6 +11,7 @@ public class MicroIRListener extends MicroBaseListener {
 
     // number of most recent temp register generated
     int registerNumber;
+
     // and of most recent label generated
     int labelNumber;
     
@@ -21,16 +22,15 @@ public class MicroIRListener extends MicroBaseListener {
         this.registerNumber = 0;
         this.labelNumber = 0;
         this.ll = new IRLinkedList();
-        System.out.println();
     }
     
-    private String getNewLabel() {
+    private int getNewLabel() {
         labelNumber += 1;
         return getLabel();
     }
 
-    private String getLabel() {
-        return new String("label" + labelNumber);
+    private int getLabel() {
+        return labelNumber;
     }
 
     private String getNewRegister(String type) {
