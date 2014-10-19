@@ -99,8 +99,15 @@ public class MicroIRListener extends MicroBaseListener {
         return "ERROR";
     }
 
-    public void addNodeProp(ParserRuleContext ctx, 
+    public void addNodeProp(ParseTree ctx, 
             String key, String value) {
+        NodeProperties np = ptp.get(ctx);
+
+        // if we don't have the node props already, add it
+        if ( ptp.get(ctx) == null ) {
+            ptp.put(ctx, new NodeProperties(ctx.getText()));
+        }
+
         ptp.get(ctx).data.put(key, value);
     }
 
@@ -114,9 +121,44 @@ public class MicroIRListener extends MicroBaseListener {
         }
     }
 
+    private void addNodeIfKeyExists(ParserRuleContext ctx, String key) {
+        NodeProperties np = ptp.get(ctx);
+
+        if (np.data.containsKey(key)) {
+            ll.addNode(np.data.get(key));
+        }
+    }
+
+    @Override public void exitStmt_list(
+            MicroParser.Stmt_listContext ctx) {
+        NodeProperties np = ptp.get(ctx);
+
+        // do on_stmt_exit only under an IF, not an ELSE
+        if (ctx.getParent().getChild(0).getText().equals("IF")) {
+            addNodeIfKeyExists(ctx, "on_stmt_exit");
+        }
+    }
+    
+
     @Override public void enterIf_stmt(
             MicroParser.If_stmtContext ctx) {
+        //System.out.println(ctx.getText());
         symbolTree.enterScopeSequentially();
+
+        // set the cond jump1 
+        addNodeProp(ctx.getChild(2), "jump_label", "label" + getNewLabel());
+
+        // exit stmt list jump2
+        addNodeProp(ctx.getChild(5), "on_stmt_exit", 
+                "JUMP label" + getNewLabel());
+
+        // enter else_part label1
+        addNodeProp(ctx.getChild(6), "on_else_enter", 
+                "LABEL label" + (getLabel()-1));
+
+        // exit else_part label2
+        addNodeProp(ctx.getChild(6), "on_else_exit", 
+                "LABEL label" + getLabel());
     }
 
     @Override public void exitIf_stmt(
@@ -124,13 +166,42 @@ public class MicroIRListener extends MicroBaseListener {
         symbolTree.exitScope();
     }
 
+    @Override public void enterElse_part(
+            MicroParser.Else_partContext ctx) {
+        addNodeIfKeyExists(ctx, "on_else_enter");
+    }
+
+    @Override public void exitElse_part(
+            MicroParser.Else_partContext ctx) {
+        addNodeIfKeyExists(ctx, "on_else_exit");
+    }
+
     @Override public void enterWhile_stmt(
             MicroParser.While_stmtContext ctx) {
         symbolTree.enterScopeSequentially();
+
+        // add new label1 to the linked list
+        ll.addNode("LABEL label" + getNewLabel());
+
+        // add jump to label2 to the end of the conditional
+        // (so we failed the conditional)
+        System.out.println("childtext: " + ctx.getChild(2).getText());
+        addNodeProp(ctx.getChild(2), "jump_label", "label" + getNewLabel());
+
+        // add jump to label1 to the endwhile
+        addNodeProp(ctx, "endwhile_jump", "JUMP label" + (getLabel() - 1));
+
+        // and label2 to the endwhile
+        addNodeProp(ctx, "endwhile_label", "LABEL label" + getLabel());
     }
 
     @Override public void exitWhile_stmt(
             MicroParser.While_stmtContext ctx) {
+        NodeProperties np = ptp.get(ctx);
+
+        ll.addNode(np.data.get("endwhile_jump"));
+        ll.addNode(np.data.get("endwhile_label"));
+
         symbolTree.exitScope();
     }
 
@@ -141,7 +212,7 @@ public class MicroIRListener extends MicroBaseListener {
     
     @Override public void exitFunc_decl(
             MicroParser.Func_declContext ctx) {
-        symbolTree.exitScope();
+        //symbolTree.exitScope();
     }
 
     @Override public void enterAssign_expr(
@@ -194,18 +265,27 @@ public class MicroIRListener extends MicroBaseListener {
     }
 
     @Override public void enterEveryRule(ParserRuleContext ctx){
-        if (ctx.getText() != null) {
-            ptp.put(ctx, new NodeProperties(ctx.getText()));
+        if (ctx.getText() != null && ptp.get(ctx) == null) {
+           ptp.put(ctx, new NodeProperties(ctx.getText()));
         }
     }
 
     @Override public void exitEveryRule(ParserRuleContext ctx){
         // put all entries from the current node's hash table 
         // into the parent node
+        // we don't want to clobber the parent node's entries,
+        // so we do it backwards and reassign them
+
         ParserRuleContext parent = ctx.getParent();
         if (parent != null) {
+            // grab the parent
             NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-            parentNodeProps.data.putAll(ptp.get(ctx).data);
+
+            // smash all entries from parent onto the child
+            ptp.get(ctx).data.putAll(parentNodeProps.data);
+
+            // assign the updated child as the parent
+            parentNodeProps.data = ptp.get(ctx).data;
         }
     }
 
@@ -214,7 +294,6 @@ public class MicroIRListener extends MicroBaseListener {
         // check the expr_prefix which is an already-parsed 
         // child of the parent node
         NodeProperties expr_prefix = ptp.get(ctx.getParent().getChild(0));
-        //System.out.println("exit factor expr_prefix: " + expr_prefix);
 
         if (!expr_prefix.toString().isEmpty()) {
           // generate add IR
@@ -235,10 +314,7 @@ public class MicroIRListener extends MicroBaseListener {
     }
 
     @Override public void exitExpr(MicroParser.ExprContext ctx) {
-        //System.out.println("expr: " + ctx.getText());
-
         NodeProperties np = ptp.get(ctx);
-        //System.out.println("exit expr: " + np.text);
 
         // pass up the last register if it exists
         if (ptp.get(ctx).data.containsKey("register")) {
@@ -250,7 +326,6 @@ public class MicroIRListener extends MicroBaseListener {
     
     @Override public void exitExpr_prefix(
             MicroParser.Expr_prefixContext ctx) {
-        //System.out.println("exit2 expr_prefix: " + ptp.get(ctx));
         NodeProperties parentProps = ptp.get(ctx.getParent());
     }
 
@@ -258,12 +333,25 @@ public class MicroIRListener extends MicroBaseListener {
         addNodeProp(ctx, "compop", ctx.getText());
     }
 
+
+    @Override public void enterCond(MicroParser.CondContext ctx) {
+        NodeProperties np = ptp.get(ctx);
+    }
+
     @Override public void exitCond(MicroParser.CondContext ctx) {
+        NodeProperties np = ptp.get(ctx);
+        String label;
+        if (np.data.containsKey("jump_label")) {
+            label = np.data.get("jump_label");
+        } else {
+            label = "label" + getNewLabel();
+        }
+
         ll.addNode( 
           lookupOpcode(ptp.get(ctx.getChild(1)).data.get("compop")) + " " + 
           ptp.get(ctx.getChild(0)).data.get("register") + " " + 
           ptp.get(ctx.getChild(2)).data.get("register") + " " +
-          getNewLabel()
+          label
         );
     }
 }
