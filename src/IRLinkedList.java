@@ -34,8 +34,6 @@ public class IRLinkedList {
     }
 
     public void printTiny() {
-        while
-
     }
 
     @Override
