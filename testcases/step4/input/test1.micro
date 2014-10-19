@@ -6,7 +6,7 @@ FLOAT b, c, d;
 
     FUNCTION VOID main()
     BEGIN
-    c := a + b + d;
+    d := a * b + c;
     END
 
 END
