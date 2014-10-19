@@ -12,6 +12,10 @@ public class NodeProperties {
         this.text = text;
     }
 
+    public String getText() {
+        return text;
+    }
+
     @Override public String toString() {
         StringBuilder str = new StringBuilder();
         Set<String> keys = data.keySet();
