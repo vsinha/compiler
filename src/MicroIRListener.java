@@ -45,19 +45,22 @@ public class MicroIRListener extends MicroBaseListener {
     }
 
     private String lookupOpcode(String operator) {
+        // we jump if the opposite of the desired
+        // operator occurs, so we return the opposite
+        // opcode
         switch (operator) {
             case ">":
-                return "GT";
-            case "<":
-                return "LT";
-            case ">=":
-                return "GE";
-            case "<=":
                 return "LE";
+            case "<":
+                return "GE";
+            case ">=":
+                return "LT";
+            case "<=":
+                return "GT";
             case "!=":
-                return "NE";
-            case "=":
                 return "EQ";
+            case "=":
+                return "NE";
             default:
                 return "compareOpERROR";
         }
