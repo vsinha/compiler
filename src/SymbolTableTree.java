@@ -56,6 +56,8 @@ public class SymbolTableTree {
     public Id lookup(String varName) {
         Id id = null;
 
+        //System.out.println("looking up: " + varName);
+
         try {
             id = _lookup(currentScope, varName);
         } catch (java.lang.NullPointerException e) {
