@@ -208,11 +208,17 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void enterFunc_decl(
             MicroParser.Func_declContext ctx) {
         symbolTree.enterScopeSequentially();
+
+        // label with the function name
+        ll.addNode("LABEL " + ctx.getChild(2).getText());
+        ll.addNode("LINK");
     }
     
     @Override public void exitFunc_decl(
             MicroParser.Func_declContext ctx) {
-        //symbolTree.exitScope();
+        symbolTree.exitScope();
+
+        ll.addNode("RET");
     }
 
     @Override public void enterAssign_expr(
@@ -312,6 +318,16 @@ public class MicroIRListener extends MicroBaseListener {
           addNodeProp(ctx, "primary", temp);
         }
     }
+     
+    @Override public void exitFactor_prefix(
+            MicroParser.Factor_prefixContext ctx) {
+        NodeProperties factor_prefix = ptp.get(ctx.getParent().getChild(0));
+        if (!factor_prefix.toString().isEmpty()) {
+        }
+
+    }
+    
+
 
     @Override public void exitExpr(MicroParser.ExprContext ctx) {
         NodeProperties np = ptp.get(ctx);

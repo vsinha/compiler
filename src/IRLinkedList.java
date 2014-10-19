@@ -11,6 +11,8 @@ public class IRLinkedList {
             this.code = code;
             this.prev = null;
             this.next = null;
+            //this.opcode = opcode;
+
         }
 
         @Override public String toString () {
@@ -31,6 +33,11 @@ public class IRLinkedList {
         tail = newNode;
     }
 
+    public void printTiny() {
+        while
+
+    }
+
     @Override
     public String toString() {
         return _toString(head.next);
@@ -40,7 +47,7 @@ public class IRLinkedList {
         if (current == null) {
             return "";
         } else {
-           return current + "\n" + _toString(current.next);
+           return "\n" + ';' + current + _toString(current.next);
         }
     }
 }

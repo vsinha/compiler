@@ -27,8 +27,12 @@ public class Micro {
             // initiate walk of tree with listener
             walker.walk(listener, tree); 
 
+            // Print everything out
+            System.out.print(";IR code");
+            // newlines are printed by the toString...
             System.out.println(listener.ll);
-
+            System.out.println(";tiny code");
+            ll.printTiny();
         } catch (ParseCancellationException e) {
             System.out.println(e);
         }
