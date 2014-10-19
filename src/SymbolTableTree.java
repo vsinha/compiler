@@ -1,4 +1,5 @@
 import java.util.*;
+import java.lang.NullPointerException;
 
 public class SymbolTableTree {
 
@@ -53,7 +54,20 @@ public class SymbolTableTree {
     }
 
     public Id lookup(String varName) {
-        return _lookup(currentScope, varName);
+        Id id = null;
+
+        try {
+            id = _lookup(currentScope, varName);
+        } catch (java.lang.NullPointerException e) {
+            // lookup failed, it's a string int or float
+            if (varName.toLowerCase().contains(".")) {
+                id = new Id(varName, "FLOAT");
+            } else {
+                id = new Id(varName, "INT");
+            }
+        }
+
+        return id;
     }
 
     private Id _lookup(SymbolTable scope, String varName) {
