@@ -84,7 +84,7 @@ public class SymbolTableTree {
         currentScope = currentScope.children.get(currentScope.childIndex);
 
         // increment
-        currentScope.childIndex += 1;
+        currentScope.parent.childIndex += 1;
     }
 
     public void exitScope() {
