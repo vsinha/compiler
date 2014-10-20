@@ -112,8 +112,10 @@ public class MicroIRListener extends MicroBaseListener {
             String key, String value) {
         NodeProperties np = ptp.get(ctx);
         
-        System.out.println("adding node prop: " + key + ", " + value);
-
+        if (key.equals("primary") && value != null) {
+            np.primary = value;
+            return;
+        }
         // if we don't have the node props already, add it
         if ( ptp.get(ctx) == null ) {
             ptp.put(ctx, new NodeProperties(ctx.getText()));
@@ -136,7 +138,7 @@ public class MicroIRListener extends MicroBaseListener {
         NodeProperties np = ptp.get(ctx);
 
         if (np.data.containsKey(key)) {
-            ll.addNode(np.data.get(key));
+            ll.addNode(np.getValue(key));
         }
     }
 
@@ -210,8 +212,8 @@ public class MicroIRListener extends MicroBaseListener {
             MicroParser.While_stmtContext ctx) {
         NodeProperties np = ptp.get(ctx);
 
-        ll.addNode(np.data.get("endwhile_jump"));
-        ll.addNode(np.data.get("endwhile_label"));
+        ll.addNode(np.getValue("endwhile_jump"));
+        ll.addNode(np.getValue("endwhile_label"));
 
         symbolTree.exitScope();
     }
@@ -244,9 +246,8 @@ public class MicroIRListener extends MicroBaseListener {
             MicroParser.Assign_exprContext ctx) {
         System.out.println("exiting assign: " + ctx.getText());
 
-        String Lvalue = ptp.get(ctx).data.get("assign_Lvalue");
+        String Lvalue = ptp.get(ctx).getValue("assign_Lvalue");
         String storeOp = "ERROR";
-        System.out.println(Lvalue);
         String LvalueType = symbolTree.lookup(Lvalue).type;
 
         if (LvalueType.equals("INT")) {
@@ -256,7 +257,7 @@ public class MicroIRListener extends MicroBaseListener {
         }
 
         ll.addNode(storeOp + " " + 
-                   ptp.get(ctx).data.get("primary") + " " +
+                   ptp.get(ctx).getValue("primary") + " " +
                    Lvalue);
     }
 
@@ -294,7 +295,7 @@ public class MicroIRListener extends MicroBaseListener {
             System.out.println("HERE");
             // our primary is a parenthesized expr [ie "(a + b)"]
             addNodeProp(ctx, "primary", 
-                    ptp.get(ctx.getChild(1)).data.get("primary"));
+                    ptp.get(ctx.getChild(1)).getValue("primary"));
         } else {
             // pretend to have loaded it to a register
             if(isInteger(ctx.getText())) {
@@ -336,12 +337,8 @@ public class MicroIRListener extends MicroBaseListener {
 
         ParserRuleContext parent = ctx.getParent();
         if (parent != null) {
-            // grab the parent
-            NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-
-            // first set primaries
-            // smash all entries from child onto parent
-            parentNodeProps.data.putAll(ptp.get(ctx).data);
+            // only pass primary up to parent nodes
+            addNodeProp(parent, "primary", ptp.get(ctx).getValue("primary"));
         }
     }
 
@@ -360,15 +357,15 @@ public class MicroIRListener extends MicroBaseListener {
         if (!expr_prefix.getText().toString().isEmpty()) {
             // generate addop IR
             String type = symbolTree.lookup(
-                    ptp.get(ctx).data.get("primary")).type;
+                    ptp.get(ctx).getValue("primary")).type;
             String temp = getNewRegister(type);
             String opcode = lookupOpcode(
-                    expr_prefix.data.get("addop"), type);
+                    expr_prefix.getValue("addop"), type);
             System.out.println("opcode lookup: " + opcode);
 
             ll.addNode(opcode + " "
-                    + expr_prefix.data.get("primary") + " "
-                    + ptp.get(ctx).data.get("primary") + " "
+                    + expr_prefix.getValue("primary") + " "
+                    + ptp.get(ctx).getValue("primary") + " "
                     + temp
                     );
 
@@ -386,14 +383,14 @@ public class MicroIRListener extends MicroBaseListener {
             if (!factor_prefix.getText().toString().isEmpty()) {
                 // generate mulop IR
                 String type = symbolTree.lookup(
-                        ptp.get(ctx).data.get("primary")).type;
+                        ptp.get(ctx).getValue("primary")).type;
                 String temp = getNewRegister(type);
                 String opcode = lookupOpcode(
-                        factor_prefix.data.get("mulop"), type);
+                        factor_prefix.getValue("mulop"), type);
 
                 ll.addNode(opcode + " "
-                        + factor_prefix.data.get("primary") + " " 
-                        + ptp.get(ctx).data.get("primary") + " "
+                        + factor_prefix.getValue("primary") + " " 
+                        + ptp.get(ctx).getValue("primary") + " "
                         + temp
                         );
 
@@ -413,10 +410,10 @@ public class MicroIRListener extends MicroBaseListener {
         /*
         if (ptp.get(ctx).data.containsKey("register")) {
             System.out.println ("register -> primary");
-          addNodeProp(ctx, "primary", ptp.get(ctx).data.get("register"));
+          addNodeProp(ctx, "primary", ptp.get(ctx).getValue("register"));
         } else {
             System.out.println ("primary -> register");
-          addNodeProp(ctx, "register", ptp.get(ctx).data.get("primary"));
+          addNodeProp(ctx, "register", ptp.get(ctx).getValue("primary"));
         }
         */
     }
@@ -440,15 +437,15 @@ public class MicroIRListener extends MicroBaseListener {
         NodeProperties np = ptp.get(ctx);
         String label;
         if (np.data.containsKey("jump_label")) {
-            label = np.data.get("jump_label");
+            label = np.getValue("jump_label");
         } else {
             label = "label" + getNewLabel();
         }
 
         ll.addNode( 
-          lookupOpcode(ptp.get(ctx.getChild(1)).data.get("compop")) + " " + 
-          ptp.get(ctx.getChild(0)).data.get("primary") + " " + 
-          ptp.get(ctx.getChild(2)).data.get("primary") + " " +
+          lookupOpcode(ptp.get(ctx.getChild(1)).getValue("compop")) + " " + 
+          ptp.get(ctx.getChild(0)).getValue("primary") + " " + 
+          ptp.get(ctx.getChild(2)).getValue("primary") + " " +
           label
         );
     }
