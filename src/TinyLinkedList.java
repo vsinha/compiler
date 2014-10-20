@@ -116,6 +116,8 @@ public class TinyLinkedList {
             this.addNode("sys writei " + inputNode.code.split(" ")[1]);
         }else if (opcode.equals("WRITEF")) {
             this.addNode("sys writer " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("WRITES")) {
+            this.addNode("sys writes " + inputNode.code.split(" ")[1]);
         }else if (opcode.equals("RET")) {
             this.addNode("sys halt");
         }else if (opcode.equals("LINK")){
