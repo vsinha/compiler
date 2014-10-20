@@ -4,7 +4,7 @@ import java.util.Set;
 public class NodeProperties {
     public String text = null;
     public LinkedHashMap<String, String> data = new LinkedHashMap<>();
-    public primary = null;
+    public String primary = null;
 
     public NodeProperties() {
     }
