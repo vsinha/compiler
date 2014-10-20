@@ -4,6 +4,7 @@ import java.util.Set;
 public class NodeProperties {
     public String text = null;
     public LinkedHashMap<String, String> data = new LinkedHashMap<>();
+    public primary = null;
 
     public NodeProperties() {
     }
@@ -14,6 +15,12 @@ public class NodeProperties {
 
     public String getText() {
         return text;
+    }
+
+    public String getValue(String key) {
+        if (key.equals("primary")) {
+            return primary;
+        }
     }
 
     @Override public String toString() {

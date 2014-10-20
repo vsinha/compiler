@@ -337,12 +337,8 @@ public class MicroIRListener extends MicroBaseListener {
 
         ParserRuleContext parent = ctx.getParent();
         if (parent != null) {
-            // grab the parent
-            NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-
-            // first set primaries
-            // smash all entries from child onto parent
-            parentNodeProps.data.putAll(ptp.get(ctx).data);
+            // only pass primary up to parent nodes
+            addNodeProp(parent, "primary", ptp.get(ctx).getValue("primary"));
         }
     }
 
