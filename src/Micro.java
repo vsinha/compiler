@@ -16,12 +16,8 @@ public class Micro {
             ParseTree tree = parser.program();
             //parser.symbolTree.printTree();
 
-            IRLinkedList ll = new IRLinkedList();
-
             ParseTreeWalker walker = new ParseTreeWalker();
-            MicroIRListener listener 
-                 = new MicroIRListener(parser.symbolTree,
-                         ll);
+            MicroIRListener listener = new MicroIRListener(parser.symbolTree);
 
 
             // initiate walk of tree with listener
@@ -31,8 +27,12 @@ public class Micro {
             System.out.print("\n;IR code");
             // newlines are printed by the toString...
             System.out.println(listener.ll);
-            System.out.println(";tiny code");
-            ll.printTiny();
+            System.out.print(";tiny code");
+
+            TinyLinkedList tinyll = new TinyLinkedList(listener.ll);
+            System.out.print(tinyll);
+
+
         } catch (ParseCancellationException e) {
             System.out.println(e);
         }
