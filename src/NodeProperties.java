@@ -5,6 +5,10 @@ public class NodeProperties {
     public String text = null;
     public LinkedHashMap<String, String> data = new LinkedHashMap<>();
     public String primary = null;
+    public String Lvalue = null;
+    public String mulop = null;
+    public String addop = null;
+
 
     public NodeProperties() {
     }
@@ -20,6 +24,15 @@ public class NodeProperties {
     public String getValue(String key) {
         if (key.equals("primary")) {
             return primary;
+            /*j
+        } else if (key.equals("assign_Lvalue")) {
+            return Lvalue;
+        } else if (key.equals("addop")) {
+            return addop;
+            */
+        } else {
+            System.out.println("looking up in hash table: " + key);
+            return data.get(key);
         }
     }
 
