@@ -42,6 +42,16 @@ public class MicroIRListener extends MicroBaseListener {
         return true;
     }
 
+    public boolean isFloat(String s) {
+        try {
+            Float.parseFloat(s);
+        } catch(NumberFormatException e) { 
+            return false; 
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+
     private String getNewRegister(String type) {
         registerNumber += 1;
         String registerName = new String("$T" + registerNumber);
@@ -103,7 +113,7 @@ public class MicroIRListener extends MicroBaseListener {
             if (type.equals("INT"))
                 return "DIVI";
             if (type.equals("FLOAT"))
-                return "DIFV";
+                return "DIVF";
         }
         return "ERROR";
     }
@@ -298,14 +308,17 @@ public class MicroIRListener extends MicroBaseListener {
                     ptp.get(ctx.getChild(1)).getValue("primary"));
         } else {
             // pretend to have loaded it to a register
-            if(isInteger(ctx.getText())) {
+            if (isInteger(ctx.getText())) {
                 String temp = getNewRegister("INT");
                 ll.addNode("STOREI " + ctx.getText() + " " + temp);
+                addNodeProp(ctx, "primary", temp);
+            } else if (isFloat(ctx.getText())) {
+                String temp = getNewRegister("FLOAT");
+                ll.addNode("STOREF " + ctx.getText() + " " + temp);
                 addNodeProp(ctx, "primary", temp);
             } else {
                 addNodeProp(ctx, "primary", ctx.getText());
             }
-
         }
     }
 
