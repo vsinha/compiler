@@ -66,21 +66,58 @@ public class TinyLinkedList {
             this.addNode("addi " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("ADDF")) {
             this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
-            this.addNode("addf " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
+            this.addNode("addr " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("SUBI")) {
             this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
             this.addNode("subi " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("SUBF")) {
             this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
-            this.addNode("subf " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
+            this.addNode("subr " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("MULTI")) {
             this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
-            this.addNode("subi " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
+            this.addNode("muli " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
+        }else if (opcode.equals("MULTF")) {
+            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.addNode("mulr " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
+        }else if (opcode.equals("DIVI")) {
+            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.addNode("divi " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
+        }else if (opcode.equals("DIVF")) {
+            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.addNode("divr " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
+        }else if (opcode.equals("STOREI")) {
+            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[2]));
+        }else if (opcode.equals("STOREF")) {
+            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[2]));
+        }else if (opcode.equals("GT")) {
+            this.addNode("jgt " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("GE")) {
+            this.addNode("jge " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("LT")) {
+            this.addNode("jlt " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("LE")) {
+            this.addNode("jle " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("NE")) {
+            this.addNode("jne " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("EQ")) {
+            this.addNode("jeq " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("JUMP")) {
+            this.addNode("jmp " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("READI")) {
+            this.addNode("sys readi " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("READF")) {
+            this.addNode("sys readr " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("WRITEI")) {
+            this.addNode("sys writei " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("WRITEF")) {
+            this.addNode("sys writer " + inputNode.code.split(" ")[1]);
+        }else if (opcode.equals("RET")) {
+            this.addNode("sys halt");
+        }else if (opcode.equals("LINK")){
+            //do nothing (maybe)
+        }else{
+            this.addNode("error in tiny conversion " + inputNode);
         }
-
-        //this.addNode(inputNode.code.replace(";","").split(" ")[0]);
-
-
     }
 
     private String convertRegister(String register){
