@@ -34,9 +34,6 @@ public class IRLinkedList {
         tail = newNode;
     }
 
-    public void printTiny() {
-    }
-
     @Override
     public String toString() {
         return _toString(head.next);
