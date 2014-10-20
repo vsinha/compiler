@@ -300,10 +300,12 @@ public class MicroIRListener extends MicroBaseListener {
             // pretend to have loaded it to a register
             if(isInteger(ctx.getText())) {
                 String temp = getNewRegister("INT");
-
+                ll.addNode("STOREI " + ctx.getText() + " " + temp);
+                addNodeProp(ctx, "primary", temp);
+            } else {
+                addNodeProp(ctx, "primary", ctx.getText());
             }
 
-            addNodeProp(ctx, "primary", ctx.getText());
         }
     }
 
