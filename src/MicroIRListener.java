@@ -15,8 +15,7 @@ public class MicroIRListener extends MicroBaseListener {
     // and of most recent label generated
     int labelNumber;
     
-    public MicroIRListener(SymbolTableTree symbolTree, 
-            IRLinkedList ll) {
+    public MicroIRListener(SymbolTableTree symbolTree) {
         this.symbolTree = symbolTree;
         this.ptp = new ParseTreeProperty<NodeProperties>();
         this.registerNumber = 0;
