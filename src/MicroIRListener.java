@@ -94,9 +94,9 @@ public class MicroIRListener extends MicroBaseListener {
 
         if (operator.equals("*")) {
             if (type.equals("INT"))
-                return "MULI";
+                return "MULTI";
             if (type.equals("FLOAT"))
-                return "MULF";
+                return "MULTF";
         }
 
         if (operator.equals("/")) {
@@ -294,19 +294,21 @@ public class MicroIRListener extends MicroBaseListener {
             System.out.println("HERE");
             // our primary is a parenthesized expr [ie "(a + b)"]
             addNodeProp(ctx, "primary", 
-                    ptp.get(ctx.getChild(1)).data.get("register"));
+                    ptp.get(ctx.getChild(1)).data.get("primary"));
         } else {
             // pretend to have loaded it to a register
             if(isInteger(ctx.getText())) {
-                //getNewRegister("INT");
+                String temp = getNewRegister("INT");
+
             }
+
             addNodeProp(ctx, "primary", ctx.getText());
         }
     }
 
     @Override public void enterEveryRule(ParserRuleContext ctx){
         if (ctx.getText() != null && ptp.get(ctx) == null) {
-           System.out.println("entering: " + ctx.getText());
+           //System.out.println("entering: " + ctx.getText());
            ptp.put(ctx, new NodeProperties(ctx.getText()));
         }
 
@@ -330,6 +332,8 @@ public class MicroIRListener extends MicroBaseListener {
         // we don't want to clobber the parent node's entries,
         // so we do it backwards and reassign them
 
+        //System.out.println("exiting: " + ctx.getText());
+
         ParserRuleContext parent = ctx.getParent();
         if (parent != null) {
             // grab the parent
@@ -343,7 +347,7 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterFactor(
             MicroParser.FactorContext ctx) {
-        System.out.println("entered factor");
+        //System.out.println("entered factor";
     }
 
     @Override public void exitFactor(
@@ -351,10 +355,34 @@ public class MicroIRListener extends MicroBaseListener {
         // check the expr_prefix which is an already-parsed 
         // child of the parent node
         System.out.println("exited factor");
+        NodeProperties expr_prefix = ptp.get(ctx.getParent().getChild(0));
+
+        if (!expr_prefix.getText().toString().isEmpty()) {
+            // generate addop IR
+            String type = symbolTree.lookup(
+                    ptp.get(ctx).data.get("primary")).type;
+            String temp = getNewRegister(type);
+            String opcode = lookupOpcode(
+                    expr_prefix.data.get("addop"), type);
+            System.out.println("opcode lookup: " + opcode);
+
+            ll.addNode(opcode + " "
+                    + expr_prefix.data.get("primary") + " "
+                    + ptp.get(ctx).data.get("primary") + " "
+                    + temp
+                    );
+
+            addNodeProp(ctx, "primary", temp);
+        }
+    }
+     
+    @Override public void exitPostfix_expr(
+            MicroParser.Postfix_exprContext ctx) {
+        // pass up the last register if it exists
 
         // check if we have a factor prefix with a mulop
         if ( !ctx.getChild(0).getText().isEmpty() ) { // mulop
-            NodeProperties factor_prefix = ptp.get(ctx.getChild(0));
+            NodeProperties factor_prefix = ptp.get(ctx.getParent().getChild(0));
             if (!factor_prefix.getText().toString().isEmpty()) {
                 // generate mulop IR
                 String type = symbolTree.lookup(
@@ -370,42 +398,11 @@ public class MicroIRListener extends MicroBaseListener {
                         );
 
                 addNodeProp(ctx, "primary", temp);
-            }
-        } else { // addop
-            NodeProperties expr_prefix = ptp.get(ctx.getParent().getChild(0));
-
-            if (!expr_prefix.getText().toString().isEmpty()) {
-                // generate add IR
-                String type = symbolTree.lookup(
-                        ptp.get(ctx).data.get("primary")).type;
-                String temp = getNewRegister(type);
-                String opcode = lookupOpcode(
-                        expr_prefix.data.get("addop"), type);
-                System.out.println("opcode lookup: " + opcode);
-
-                ll.addNode(opcode + " "
-                        + expr_prefix.data.get("primary") + " "
-                        + ptp.get(ctx).data.get("primary") + " "
-                        + temp
-                        );
-
-                addNodeProp(ctx, "register", temp);
+            } else {
+                System.out.println("factor prefix is not empty: " + 
+                        factor_prefix.getText().toString());
             }
         }
-    }
-     
-    @Override public void exitFactor_prefix(
-            MicroParser.Factor_prefixContext ctx) {
-        // pass up the last register if it exists
-        /*
-        if (ptp.get(ctx).data.containsKey("register")) {
-            System.out.println("here1");
-          addNodeProp(ctx, "register", ptp.get(ctx).data.get("register"));
-        } else {
-            System.out.println("here2");
-          addNodeProp(ctx, "register", ptp.get(ctx).data.get("primary"));
-        }
-        */
     }
     
 
@@ -427,6 +424,7 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitExpr_prefix(
             MicroParser.Expr_prefixContext ctx) {
         NodeProperties parentProps = ptp.get(ctx.getParent());
+        System.out.println("exiting expr prefix: " + ctx.getText());
     }
 
     @Override public void exitCompop(MicroParser.CompopContext ctx) {
@@ -449,8 +447,8 @@ public class MicroIRListener extends MicroBaseListener {
 
         ll.addNode( 
           lookupOpcode(ptp.get(ctx.getChild(1)).data.get("compop")) + " " + 
-          ptp.get(ctx.getChild(0)).data.get("register") + " " + 
-          ptp.get(ctx.getChild(2)).data.get("register") + " " +
+          ptp.get(ctx.getChild(0)).data.get("primary") + " " + 
+          ptp.get(ctx.getChild(2)).data.get("primary") + " " +
           label
         );
     }
