@@ -300,6 +300,7 @@ public class MicroIRListener extends MicroBaseListener {
             // pretend to have loaded it to a register
             if(isInteger(ctx.getText())) {
                 String temp = getNewRegister("INT");
+
             }
 
             addNodeProp(ctx, "primary", ctx.getText());
@@ -347,7 +348,7 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterFactor(
             MicroParser.FactorContext ctx) {
-        System.out.println("entered factor");
+        //System.out.println("entered factor";
     }
 
     @Override public void exitFactor(
@@ -373,25 +374,12 @@ public class MicroIRListener extends MicroBaseListener {
                     );
 
             addNodeProp(ctx, "primary", temp);
-        } else {
-            System.out.println("expr prefix is not empty: " + 
-                    expr_prefix.getText().toString());
         }
-
-            }
+    }
      
     @Override public void exitPostfix_expr(
             MicroParser.Postfix_exprContext ctx) {
         // pass up the last register if it exists
-        /*
-        if (ptp.get(ctx).data.containsKey("register")) {
-            System.out.println("here1");
-          //addNodeProp(ctx, "register", ptp.get(ctx).data.get("register"));
-        } else {
-            System.out.println("here2");
-          addNodeProp(ctx, "register", ptp.get(ctx).data.get("primary"));
-        }
-        */
 
         // check if we have a factor prefix with a mulop
         if ( !ctx.getChild(0).getText().isEmpty() ) { // mulop
@@ -438,30 +426,6 @@ public class MicroIRListener extends MicroBaseListener {
             MicroParser.Expr_prefixContext ctx) {
         NodeProperties parentProps = ptp.get(ctx.getParent());
         System.out.println("exiting expr prefix: " + ctx.getText());
-
-        /*
-        NodeProperties child_expr_prefix = ptp.get(ctx.getParent().getChild(0));
-
-        if (!child_expr_prefix.getText().toString().isEmpty()) {
-            // generate add IR
-            String type = symbolTree.lookup(
-                    ptp.get(ctx).data.get("primary")).type;
-            String temp = getNewRegister(type);
-            String opcode = lookupOpcode(
-            System.out.println("opcode lookup: " + opcode);
-
-            ll.addNode(opcode + " "
-                    + child_expr_prefix.data.get("primary") + " "
-                    + ptp.get(ctx).data.get("primary") + " "
-                    + temp
-                    );
-
-            addNodeProp(ctx, "register", temp);
-        } else {
-            System.out.println("expr prefix is not empty: " + 
-                    child_expr_prefix.getText().toString());
-        }
-        */
     }
 
     @Override public void exitCompop(MicroParser.CompopContext ctx) {
