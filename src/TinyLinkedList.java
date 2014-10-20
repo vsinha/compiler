@@ -1,3 +1,4 @@
+import java.util.*;
 public class TinyLinkedList {
     Node head;
     Node tail;
@@ -20,14 +21,18 @@ public class TinyLinkedList {
         }
     }
 
-    public TinyLinkedList(IRLinkedList irll) {
+    public TinyLinkedList(IRLinkedList irll, SymbolTableTree symbols) {
 
 
         head = new Node("");
         tail = head;
 
 
-        //add all the symbols from the symbol table
+            Set<String> keys = symbols.global.table.keySet();
+            for (String key : keys) {
+                String varName = symbols.global.table.get(key).toString().split(" ")[1];
+                this.addNode("var " + varName);
+            }
 
 
         irll.head = irll.head.next;
