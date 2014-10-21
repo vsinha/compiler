@@ -26,7 +26,7 @@ public class IRLinkedList {
     }
 
     public void addNode(String code) {
-        System.out.println(code);
+        //System.out.println(code);
         Node newNode = new Node(code);
 
         newNode.prev = tail;

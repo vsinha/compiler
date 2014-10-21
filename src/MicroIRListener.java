@@ -165,7 +165,7 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterIf_stmt(
             MicroParser.If_stmtContext ctx) {
-        //System.out.println(ctx.getText());
+        ////System.out.println(ctx.getText());
         symbolTree.enterScopeSequentially();
 
         // set the cond jump1 
@@ -208,7 +208,7 @@ public class MicroIRListener extends MicroBaseListener {
 
         // add jump to label2 to the end of the conditional
         // (so we failed the conditional)
-        System.out.println("childtext: " + ctx.getChild(2).getText());
+        //System.out.println("childtext: " + ctx.getChild(2).getText());
         addNodeProp(ctx.getChild(2), "jump_label", "label" + getNewLabel());
 
         // add jump to label1 to the endwhile
@@ -254,7 +254,7 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void exitAssign_expr(
             MicroParser.Assign_exprContext ctx) {
-        System.out.println("exiting assign: " + ctx.getText());
+        //System.out.println("exiting assign: " + ctx.getText());
 
         String Lvalue = ptp.get(ctx).getValue("assign_Lvalue");
         String storeOp = "ERROR";
@@ -274,7 +274,7 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitId(
             MicroParser.IdContext ctx) {
         NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-        System.out.println("here: " + ctx.getParent().getText());
+        //System.out.println("here: " + ctx.getParent().getText());
         
         // if we're directly the child of an assign statement
         if (ctx.getParent().getChild(1) != null
@@ -290,19 +290,19 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void exitMulop(
             MicroParser.MulopContext ctx) {
-        System.out.println("mulop: " + ctx.getText());
+        //System.out.println("mulop: " + ctx.getText());
         addNodeProp(ctx, "mulop", ctx.getText()); 
     }
 
     @Override public void enterPrimary(
             MicroParser.PrimaryContext ctx) {
-        System.out.println("entering primary: " + ctx.getText());
+        //System.out.println("entering primary: " + ctx.getText());
     }
 
     @Override public void exitPrimary(
             MicroParser.PrimaryContext ctx) {
         if (ctx.getChild(0).getText().equals("(")) {
-            System.out.println("HERE");
+            //System.out.println("HERE");
             // our primary is a parenthesized expr [ie "(a + b)"]
             addNodeProp(ctx, "primary", 
                     ptp.get(ctx.getChild(1)).getValue("primary"));
@@ -324,7 +324,7 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterEveryRule(ParserRuleContext ctx){
         if (ctx.getText() != null && ptp.get(ctx) == null) {
-           //System.out.println("entering: " + ctx.getText());
+           ////System.out.println("entering: " + ctx.getText());
            ptp.put(ctx, new NodeProperties(ctx.getText()));
         }
 
@@ -348,7 +348,7 @@ public class MicroIRListener extends MicroBaseListener {
         // we don't want to clobber the parent node's entries,
         // so we do it backwards and reassign them
 
-        //System.out.println("exiting: " + ctx.getText());
+        ////System.out.println("exiting: " + ctx.getText());
 
         ParserRuleContext parent = ctx.getParent();
         if (parent != null) {
@@ -359,14 +359,14 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterFactor(
             MicroParser.FactorContext ctx) {
-        //System.out.println("entered factor";
+        ////System.out.println("entered factor";
     }
 
     @Override public void exitFactor(
             MicroParser.FactorContext ctx) {
         // check the expr_prefix which is an already-parsed 
         // child of the parent node
-        System.out.println("exited factor");
+        //System.out.println("exited factor");
         NodeProperties expr_prefix = ptp.get(ctx.getParent().getChild(0));
 
         if (!expr_prefix.getText().toString().isEmpty()) {
@@ -376,7 +376,7 @@ public class MicroIRListener extends MicroBaseListener {
             String temp = getNewRegister(type);
             String opcode = lookupOpcode(
                     expr_prefix.getValue("addop"), type);
-            System.out.println("opcode lookup: " + opcode);
+            //System.out.println("opcode lookup: " + opcode);
 
             ll.addNode(opcode + " "
                     + expr_prefix.getValue("primary") + " "
@@ -411,8 +411,8 @@ public class MicroIRListener extends MicroBaseListener {
 
                 addNodeProp(ctx, "primary", temp);
             } else {
-                System.out.println("factor prefix is not empty: " + 
-                        factor_prefix.getText().toString());
+                //System.out.println("factor prefix is not empty: " + 
+                        //factor_prefix.getText().toString());
             }
         }
     }
@@ -424,10 +424,10 @@ public class MicroIRListener extends MicroBaseListener {
         // pass up the last register if it exists
         /*
         if (ptp.get(ctx).data.containsKey("register")) {
-            System.out.println ("register -> primary");
+            //System.out.println ("register -> primary");
           addNodeProp(ctx, "primary", ptp.get(ctx).getValue("register"));
         } else {
-            System.out.println ("primary -> register");
+            //System.out.println ("primary -> register");
           addNodeProp(ctx, "register", ptp.get(ctx).getValue("primary"));
         }
         */
@@ -436,7 +436,7 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitExpr_prefix(
             MicroParser.Expr_prefixContext ctx) {
         NodeProperties parentProps = ptp.get(ctx.getParent());
-        System.out.println("exiting expr prefix: " + ctx.getText());
+        //System.out.println("exiting expr prefix: " + ctx.getText());
     }
 
     @Override public void exitCompop(MicroParser.CompopContext ctx) {

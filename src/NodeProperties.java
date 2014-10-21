@@ -31,7 +31,7 @@ public class NodeProperties {
             return addop;
             */
         } else {
-            System.out.println("looking up in hash table: " + key);
+            //System.out.println("looking up in hash table: " + key);
             return data.get(key);
         }
     }

@@ -24,7 +24,7 @@ public class Micro {
             walker.walk(listener, tree); 
 
             // Print everything out
-            System.out.print("\n;IR code");
+            System.out.print(";IR code");
             // newlines are printed by the toString...
             System.out.println(listener.ll);
             System.out.print(";tiny code");
