@@ -6,7 +6,11 @@ BEGIN
     a := 2;
 
     IF (a = 1)
-      b := 1;
+      IF (a > 0)
+        b := a + 4;
+      ELSE
+        b:= 3;
+      ENDIF
     ELSE
       b := 2;
     ENDIF
