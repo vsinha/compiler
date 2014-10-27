@@ -141,10 +141,10 @@ public class MicroIRListener extends MicroBaseListener {
         }
     }
 
-    private void addNodeIfKeyExists(ParserRuleContext ctx, String key) {
+    private void addNodeIfKeyIsNotNull(ParserRuleContext ctx, String key) {
         NodeProperties np = ptp.get(ctx);
 
-        if (np.containsKey(key)) {
+        if (!np.isNull(key)) {
             ll.addNode(np.getValue(key));
         }
     }
@@ -155,14 +155,14 @@ public class MicroIRListener extends MicroBaseListener {
 
         // do on_stmt_exit only under an IF, not an ELSE
         if (ctx.getParent().getChild(0).getText().equals("IF")) {
-            addNodeIfKeyExists(ctx, "on_stmt_exit");
+            addNodeIfKeyIsNotNull(ctx, "on_stmt_exit");
         }
     }
     
 
     @Override public void enterIf_stmt(
             MicroParser.If_stmtContext ctx) {
-        ////System.out.println(ctx.getText());
+        //System.out.println(ctx.getText());
         symbolTree.enterScopeSequentially();
 
         // set the cond jump1 
@@ -188,12 +188,12 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterElse_part(
             MicroParser.Else_partContext ctx) {
-        addNodeIfKeyExists(ctx, "on_else_enter");
+        addNodeIfKeyIsNotNull(ctx, "on_else_enter");
     }
 
     @Override public void exitElse_part(
             MicroParser.Else_partContext ctx) {
-        addNodeIfKeyExists(ctx, "on_else_exit");
+        addNodeIfKeyIsNotNull(ctx, "on_else_exit");
     }
 
     @Override public void enterWhile_stmt(
@@ -291,11 +291,6 @@ public class MicroIRListener extends MicroBaseListener {
         addNodeProp(ctx, "mulop", ctx.getText()); 
     }
 
-    @Override public void enterPrimary(
-            MicroParser.PrimaryContext ctx) {
-        //System.out.println("entering primary: " + ctx.getText());
-    }
-
     @Override public void exitPrimary(
             MicroParser.PrimaryContext ctx) {
         if (ctx.getChild(0).getText().equals("(")) {
@@ -309,10 +304,12 @@ public class MicroIRListener extends MicroBaseListener {
                 String temp = getNewRegister("INT");
                 ll.addNode("STOREI " + ctx.getText() + " " + temp);
                 addNodeProp(ctx, "primary", temp);
+
             } else if (isFloat(ctx.getText())) {
                 String temp = getNewRegister("FLOAT");
                 ll.addNode("STOREF " + ctx.getText() + " " + temp);
                 addNodeProp(ctx, "primary", temp);
+
             } else {
                 addNodeProp(ctx, "primary", ctx.getText());
             }
@@ -333,8 +330,6 @@ public class MicroIRListener extends MicroBaseListener {
         // so we only pass entries that haven't been set already
 
         //System.out.println("exiting: " + ctx.getText());
-
-        
         if (ctx.getParent() != null) {
 
             NodeProperties parentNode = ptp.get(ctx.getParent());
@@ -348,11 +343,6 @@ public class MicroIRListener extends MicroBaseListener {
                 }
             }
         }
-    }
-
-    @Override public void enterFactor(
-            MicroParser.FactorContext ctx) {
-        //System.out.println("entered factor";
     }
 
     @Override public void exitFactor(
@@ -409,36 +399,9 @@ public class MicroIRListener extends MicroBaseListener {
             }
         }
     }
-    
-
-    @Override public void exitExpr(MicroParser.ExprContext ctx) {
-        NodeProperties np = ptp.get(ctx);
-
-        // pass up the last register if it exists
-        /*
-        if (ptp.get(ctx).data.containsKey("register")) {
-            //System.out.println ("register -> primary");
-          addNodeProp(ctx, "primary", ptp.get(ctx).getValue("register"));
-        } else {
-            //System.out.println ("primary -> register");
-          addNodeProp(ctx, "register", ptp.get(ctx).getValue("primary"));
-        }
-        */
-    }
-    
-    @Override public void exitExpr_prefix(
-            MicroParser.Expr_prefixContext ctx) {
-        NodeProperties parentProps = ptp.get(ctx.getParent());
-        //System.out.println("exiting expr prefix: " + ctx.getText());
-    }
 
     @Override public void exitCompop(MicroParser.CompopContext ctx) {
         addNodeProp(ctx, "compop", ctx.getText());
-    }
-
-
-    @Override public void enterCond(MicroParser.CondContext ctx) {
-        NodeProperties np = ptp.get(ctx);
     }
 
     @Override public void exitCond(MicroParser.CondContext ctx) {
