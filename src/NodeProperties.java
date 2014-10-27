@@ -6,6 +6,7 @@ import java.util.Arrays;
 public class NodeProperties {
     public String text = null;
     LinkedHashMap<String, String> data = new LinkedHashMap<>();
+
     static String[] _keys = {"primary", "assign_Lvalue",
                         "addop", "mulop", "compop",
                         "jump_label", "on_stmt_exit",
