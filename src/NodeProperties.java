@@ -1,19 +1,25 @@
 import java.util.LinkedHashMap;
 import java.util.Set;
+import java.util.List;
+import java.util.Arrays;
 
 public class NodeProperties {
     public String text = null;
-    public LinkedHashMap<String, String> data = new LinkedHashMap<>();
-    public String primary = null;
-    public String Lvalue = null;
-    public String mulop = null;
-    public String addop = null;
-
+    LinkedHashMap<String, String> data = new LinkedHashMap<>();
+    static String[] _keys = {"primary", "assign_Lvalue",
+                        "addop", "mulop", "compop",
+                        "jump_label", "on_stmt_exit",
+                        "on_else_enter", "on_else_exit"};
+    public static List<String> keys = Arrays.asList(_keys);
 
     public NodeProperties() {
+        for (String key : keys) {
+            data.put(key, null);
+        }
     }
 
     public NodeProperties(String text) {
+        this();
         this.text = text;
     }
 
@@ -22,18 +28,26 @@ public class NodeProperties {
     }
 
     public String getValue(String key) {
-        if (key.equals("primary")) {
-            return primary;
-            /*j
-        } else if (key.equals("assign_Lvalue")) {
-            return Lvalue;
-        } else if (key.equals("addop")) {
-            return addop;
-            */
-        } else {
-            //System.out.println("looking up in hash table: " + key);
-            return data.get(key);
-        }
+        return data.get(key);
+    }
+
+    public boolean putValue(String key, String value){
+       if (data.containsKey(key)) {
+           data.put(key, value);
+           return true;
+       } else {
+           System.out.println("attempted to put invalid key: " + 
+                   key + ", " + value);
+           return false;
+       }
+    }
+
+    public boolean containsKey(String key) {
+        return data.containsKey(key);
+    }
+
+    public boolean isNull(String key) {
+        return (data.get(key) == null);
     }
 
     @Override public String toString() {

@@ -120,18 +120,15 @@ public class MicroIRListener extends MicroBaseListener {
 
     public void addNodeProp(ParseTree ctx, 
             String key, String value) {
-        NodeProperties np = ptp.get(ctx);
         
-        if (key.equals("primary") && value != null) {
-            np.primary = value;
-            return;
-        }
         // if we don't have the node props already, add it
+        NodeProperties np = ptp.get(ctx);
         if ( ptp.get(ctx) == null ) {
             ptp.put(ctx, new NodeProperties(ctx.getText()));
+            np = ptp.get(ctx);
         }
 
-        ptp.get(ctx).data.put(key, value);
+        np.putValue(key, value);
     }
 
     public void passToParent(ParserRuleContext ctx, String str) {
@@ -147,7 +144,7 @@ public class MicroIRListener extends MicroBaseListener {
     private void addNodeIfKeyExists(ParserRuleContext ctx, String key) {
         NodeProperties np = ptp.get(ctx);
 
-        if (np.data.containsKey(key)) {
+        if (np.containsKey(key)) {
             ll.addNode(np.getValue(key));
         }
     }
@@ -249,7 +246,7 @@ public class MicroIRListener extends MicroBaseListener {
 
         // create space (effectively a flag) for a 
         // value to assign to
-        ptp.get(ctx).data.put("assign_Lvalue", null);
+        ptp.get(ctx).putValue("assign_Lvalue", null);
     }
 
     @Override public void exitAssign_expr(
@@ -324,21 +321,8 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterEveryRule(ParserRuleContext ctx){
         if (ctx.getText() != null && ptp.get(ctx) == null) {
-           ////System.out.println("entering: " + ctx.getText());
+           //System.out.println("entering: " + ctx.getText());
            ptp.put(ctx, new NodeProperties(ctx.getText()));
-        }
-
-        ParserRuleContext parent = ctx.getParent();
-        if (parent != null) {
-            // grab the parent
-            NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-
-            // first set primaries
-            // smash all entries from parent onto the child
-            ptp.get(ctx).data.putAll(parentNodeProps.data);
-
-            // assign the updated child as the parent
-            parentNodeProps.data = ptp.get(ctx).data;
         }
     }
 
@@ -346,20 +330,29 @@ public class MicroIRListener extends MicroBaseListener {
         // put all entries from the current node's hash table 
         // into the parent node
         // we don't want to clobber the parent node's entries,
-        // so we do it backwards and reassign them
+        // so we only pass entries that haven't been set already
 
-        ////System.out.println("exiting: " + ctx.getText());
+        //System.out.println("exiting: " + ctx.getText());
 
-        ParserRuleContext parent = ctx.getParent();
-        if (parent != null) {
-            // only pass primary up to parent nodes
-            addNodeProp(parent, "primary", ptp.get(ctx).getValue("primary"));
+        
+        if (ctx.getParent() != null) {
+
+            NodeProperties parentNode = ptp.get(ctx.getParent());
+            NodeProperties thisNode = ptp.get(ctx);
+            for (String key : NodeProperties.keys) {
+                // only pass values that haven't been set
+                // to the parent.
+                // this way we don't overwrite anything accidentally
+                if (parentNode.isNull(key)) {
+                    parentNode.putValue(key, thisNode.getValue(key));
+                }
+            }
         }
     }
 
     @Override public void enterFactor(
             MicroParser.FactorContext ctx) {
-        ////System.out.println("entered factor";
+        //System.out.println("entered factor";
     }
 
     @Override public void exitFactor(
@@ -451,7 +444,7 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitCond(MicroParser.CondContext ctx) {
         NodeProperties np = ptp.get(ctx);
         String label;
-        if (np.data.containsKey("jump_label")) {
+        if (np.containsKey("jump_label")) {
             label = np.getValue("jump_label");
         } else {
             label = "label" + getNewLabel();
