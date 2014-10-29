@@ -1,0 +1,12 @@
+PROGRAM test
+BEGIN
+  FUNCTION VOID main()
+  BEGIN
+    INT a, b;
+    a := 0;
+
+    WHILE (a < 2)
+      a := a + 1; 
+    ENDWHILE
+  END
+END
