@@ -338,8 +338,11 @@ public class MicroIRListener extends MicroBaseListener {
                 // only pass values that haven't been set
                 // to the parent.
                 // this way we don't overwrite anything accidentally
-                if (parentNode.isNull(key)) {
-                    parentNode.putValue(key, thisNode.getValue(key));
+                // also, always override the "primary" key
+                String value = thisNode.getValue(key);
+                if (value != null && 
+                    ( key.equals("primary") || parentNode.isNull(key) )) {
+                    parentNode.putValue(key, value);
                 }
             }
         }
@@ -368,6 +371,7 @@ public class MicroIRListener extends MicroBaseListener {
                     );
 
             addNodeProp(ctx, "primary", temp);
+            //System.out.println(";added new add primary: " + temp);
         }
     }
      
@@ -393,10 +397,8 @@ public class MicroIRListener extends MicroBaseListener {
                         );
 
                 addNodeProp(ctx, "primary", temp);
-            } else {
-                //System.out.println("factor prefix is not empty: " + 
-                        //factor_prefix.getText().toString());
-            }
+            //System.out.println(";added new mul primary: " + temp);
+           }
         }
     }
 
