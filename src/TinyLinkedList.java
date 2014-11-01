@@ -27,13 +27,12 @@ public class TinyLinkedList {
         head = new Node("");
         tail = head;
 
-
             Set<String> keys = symbols.global.table.keySet();
             for (String key : keys) {
                 String varName = symbols.global.table.get(key).toString().split(" ")[1];
                 this.addNode("var " + varName);
             }
-
+            this.addNode("str newline \"\\n\"");
 
         irll.head = irll.head.next;
 
@@ -62,7 +61,7 @@ public class TinyLinkedList {
     private void convertNode( IRLinkedList.Node inputNode){
 
         String[] nodeArray = inputNode.code.split(" ");
-        String opcode = nodeArray[0];
+        String opcode = nodeArray[0];x
 
         if(opcode.equals("LABEL")){
             this.addNode("label " + inputNode.code.split(" ")[1]);
