@@ -61,7 +61,7 @@ public class TinyLinkedList {
     private void convertNode( IRLinkedList.Node inputNode){
 
         String[] nodeArray = inputNode.code.split(" ");
-        String opcode = nodeArray[0];x
+        String opcode = nodeArray[0];
 
         if(opcode.equals("LABEL")){
             this.addNode("label " + inputNode.code.split(" ")[1]);
