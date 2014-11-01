@@ -29,10 +29,14 @@ public class TinyLinkedList {
 
             Set<String> keys = symbols.global.table.keySet();
             for (String key : keys) {
+                Id var = symbols.lookup(key);
                 String varName = symbols.global.table.get(key).toString().split(" ")[1];
-                this.addNode("var " + varName);
+                if (var.isString()) {
+                    this.addNode("str " + varName + " " + var.value);
+                } else {
+                    this.addNode("var " + varName);
+                }
             }
-            this.addNode("str newline \"\\n\"");
 
         irll.head = irll.head.next;
 
