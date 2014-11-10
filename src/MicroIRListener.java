@@ -188,12 +188,23 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterElse_part(
             MicroParser.Else_partContext ctx) {
-        addNodeIfKeyIsNotNull(ctx, "on_else_enter");
+
+        if (!ctx.getText().isEmpty()) {
+            symbolTree.exitScope();
+            symbolTree.enterScopeSequentially();
+            addNodeIfKeyIsNotNull(ctx, "on_else_enter");
+        }
     }
 
     @Override public void exitElse_part(
             MicroParser.Else_partContext ctx) {
-        addNodeIfKeyIsNotNull(ctx, "on_else_exit");
+        if (!ctx.getText().isEmpty()) {
+            // exiting the else part scope will be done
+            // by the trailing "ELSIF", which is technically
+            // part of the IF statement semantics...
+            //symbolTree.exitScope();
+            addNodeIfKeyIsNotNull(ctx, "on_else_exit");
+        }
     }
 
     @Override public void enterWhile_stmt(
