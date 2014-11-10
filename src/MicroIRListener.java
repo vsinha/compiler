@@ -282,7 +282,6 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitId(
             MicroParser.IdContext ctx) {
         NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-        //System.out.println("here: " + ctx.getParent().getText());
         
         // if we're directly the child of an assign statement
         if (ctx.getParent().getChild(1) != null
@@ -305,7 +304,6 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitPrimary(
             MicroParser.PrimaryContext ctx) {
         if (ctx.getChild(0).getText().equals("(")) {
-            //System.out.println("HERE");
             // our primary is a parenthesized expr [ie "(a + b)"]
             addNodeProp(ctx, "primary", 
                     ptp.get(ctx.getChild(1)).getValue("primary"));
