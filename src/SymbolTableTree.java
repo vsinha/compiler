@@ -87,8 +87,10 @@ public class SymbolTableTree {
             // lookup failed, it's a string int or float
             if ( isFloat(varName) ) {
                 id = new Id(varName, "FLOAT");
+                id.setIsRegister();
             } else if ( isInteger(varName) ) {
                 id = new Id(varName, "INT");
+                id.setIsRegister();
             } else {
                 id = null;
             }
