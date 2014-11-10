@@ -55,6 +55,27 @@ public class SymbolTableTree {
         st.parent.children.add(st);
     }
 
+    public boolean isInteger(String s) {
+        try { 
+            Integer.parseInt(s); 
+        } catch(NumberFormatException e) { 
+            return false; 
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+
+    public boolean isFloat(String s) {
+        try {
+            Float.parseFloat(s);
+        } catch(NumberFormatException e) { 
+            return false; 
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+
+
     public Id lookup(String varName) {
         Id id = null;
 
@@ -64,10 +85,12 @@ public class SymbolTableTree {
             id = _lookup(currentScope, varName);
         } catch (java.lang.NullPointerException e) {
             // lookup failed, it's a string int or float
-            if (varName.toLowerCase().contains(".")) {
+            if ( isFloat(varName) ) {
                 id = new Id(varName, "FLOAT");
-            } else {
+            } else if ( isInteger(varName) ) {
                 id = new Id(varName, "INT");
+            } else {
+                id = null;
             }
         }
 
