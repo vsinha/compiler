@@ -2,7 +2,7 @@
 
 make clean; make compiler
 
-FILES=$(ls testcases/step3/input/ | sort -k1.5n)
+FILES=$(ls testcases/step5/input/ | sort -k1.5n)
 
 let failCount=0
 let passCount=0
@@ -12,10 +12,10 @@ do
     FILENAME=${f##*/}
     FILENAME=${FILENAME%.micro}
     echo "Runnning $FILENAME"
-    OUTPUT=$(java -cp lib/antlr.jar:classes/ Micro testcases/step3/input/$FILENAME.micro)
-    echo "Output: $OUTPUT"
-    EXPECTEDOUTPUT=$(cat testcases/step3/output/$FILENAME.out)
-    echo "Expected Output: $EXPECTEDOUTPUT"
+    OUTPUT=$(java -cp lib/antlr.jar:classes/ Micro testcases/step5/input/$FILENAME.micro > deleteMe.tiny; tiny_simulator/tiny deleteMe.tiny > deleteMe2.out; cat deleteMe2.out | sed "/STATISTICS/q" | sed '$d')
+    echo -e "Output:\n$OUTPUT"
+    EXPECTEDOUTPUT=$(cat testcases/step5/output/$FILENAME.out > deleteMe.tiny; tiny_simulator/tiny deleteMe.tiny > deleteMe2.out; cat deleteMe2.out | sed "/STATISTICS/q" | sed '$d')
+    echo -e "Expected Output:\n$EXPECTEDOUTPUT"
     
     EXPECTEDOUTPUT="${EXPECTEDOUTPUT}"
 
@@ -26,7 +26,7 @@ do
     else
        printf "\033[31;1mFAIL \033[0m\n"
        ((failCount++))
-       exit
+       #exit
     fi
     echo
 done
