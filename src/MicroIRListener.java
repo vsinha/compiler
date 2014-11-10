@@ -323,7 +323,6 @@ public class MicroIRListener extends MicroBaseListener {
         // if the Rvalue is a variable, move it to a register first
         Id RvalueId = symbolTree.lookup(Rvalue);
         if (!RvalueId.isRegister()) {
-            System.out.println("here");
             String temp = null;
 
             if (RvalueId.type.equals("INT")) {
