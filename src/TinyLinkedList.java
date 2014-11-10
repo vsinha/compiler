@@ -80,45 +80,88 @@ public class TinyLinkedList {
         }else if(opcode.equals("LABEL")){
             this.addNode("label " + inputNode.code.split(" ")[1]);
         }else if (opcode.equals("ADDI")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("addi " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("ADDF")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("addr " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("SUBI")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("subi " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("SUBF")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("subr " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("MULTI")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("muli " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("MULTF")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("mulr " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("DIVI")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("divi " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("DIVF")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
+            this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("divr " + this.convertRegister(nodeArray[2]) + " " + this.convertRegister(nodeArray[3]));
         }else if (opcode.equals("STOREI")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[2]));
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[2]));
+            this.moveConversion(nodeArray[1], nodeArray[2]);
         }else if (opcode.equals("STOREF")) {
-            this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[2]));
-        }else if (opcode.equals("GT")) {
-            this.addNode("jgt " + inputNode.code.split(" ")[1]);
-        }else if (opcode.equals("GE")) {
-            this.addNode("jge " + inputNode.code.split(" ")[1]);
-        }else if (opcode.equals("LT")) {
-            this.addNode("jlt " + inputNode.code.split(" ")[1]);
-        }else if (opcode.equals("LE")) {
-            this.addNode("jle " + inputNode.code.split(" ")[1]);
-        }else if (opcode.equals("NE")) {
-            this.addNode("jne " + inputNode.code.split(" ")[1]);
-        }else if (opcode.equals("EQ")) {
-            this.addNode("jeq " + inputNode.code.split(" ")[1]);
+            //this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[2]));
+            this.moveConversion(nodeArray[1], nodeArray[2]);
+        
+        }else if (opcode.equals("GT") || opcode.equals("GTI")) {
+            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jgt " + inputNode.code.split(" ")[3]);
+        }else if (opcode.equals("GTF")) {
+            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jgt " + inputNode.code.split(" ")[3]);
+        
+
+        }else if (opcode.equals("GE") || opcode.equals("GEI")) {
+            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jge " + inputNode.code.split(" ")[3]);
+        }else if (opcode.equals("GEF")) {
+            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jge " + inputNode.code.split(" ")[3]);
+        
+        }else if (opcode.equals("LT") || opcode.equals("LTI")) {
+            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jlt " + inputNode.code.split(" ")[3]);
+        }else if (opcode.equals("LTF")) {
+            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jlt " + inputNode.code.split(" ")[3]);        
+
+
+        }else if (opcode.equals("LE") || opcode.equals("LEI")) {
+            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jle " + inputNode.code.split(" ")[3]);
+        }else if (opcode.equals("LEF")) {
+            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jle " + inputNode.code.split(" ")[3]);
+        
+        }else if (opcode.equals("NE") || opcode.equals("NEI")) {
+            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jne " + inputNode.code.split(" ")[3]);
+        }else if (opcode.equals("NEF")) {
+            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jne " + inputNode.code.split(" ")[3]);
+        
+        }else if (opcode.equals("EQI") || opcode.equals("EQ")) {
+            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jeq " + inputNode.code.split(" ")[3]);
+        }else if (opcode.equals("EQF")){
+            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("jeq " + inputNode.code.split(" ")[3]);
+        
         }else if (opcode.equals("JUMP")) {
             this.addNode("jmp " + inputNode.code.split(" ")[1]);
         }else if (opcode.equals("READI")) {
@@ -136,7 +179,7 @@ public class TinyLinkedList {
         }else if (opcode.equals("LINK")){
             //do nothing (maybe)
         }else{
-            this.addNode("error in tiny conversion: opcode is " + inputNode);
+            this.addNode("error in tiny conversion: opcode is: " + inputNode);
         }
     }
 
@@ -144,13 +187,26 @@ public class TinyLinkedList {
         if (register.charAt(0) == '$'){
             String number = register.replace("$T", "");
 
-            int registerNumber = Integer.parseInt(number) - 1;
+            int registerNumber = Integer.parseInt(number); //this used to be "Integer.parseInt(number) - 1" but now I am reserving r0 for the "MOVE" register
 
             return "r" + String.valueOf(registerNumber);
         }else{
             return register;
         }
     }
+
+
+    private void moveConversion(String operand1, String operand2){
+
+        if (this.convertRegister(operand1).equals(operand1) && this.convertRegister(operand2).equals(operand2)){
+            this.addNode("move " + operand1 + " r0");
+            this.addNode("move " + "r0 " + operand2);
+        } else {
+            this.addNode("move " + this.convertRegister(operand1) + " " + this.convertRegister(operand2));
+        }
+
+    }
+
 
 
     @Override
