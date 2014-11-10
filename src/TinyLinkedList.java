@@ -122,7 +122,7 @@ public class TinyLinkedList {
             this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jgt " + inputNode.code.split(" ")[3]);
         }else if (opcode.equals("GTF")) {
-            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jgt " + inputNode.code.split(" ")[3]);
         
 
@@ -130,14 +130,14 @@ public class TinyLinkedList {
             this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jge " + inputNode.code.split(" ")[3]);
         }else if (opcode.equals("GEF")) {
-            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jge " + inputNode.code.split(" ")[3]);
         
         }else if (opcode.equals("LT") || opcode.equals("LTI")) {
             this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jlt " + inputNode.code.split(" ")[3]);
         }else if (opcode.equals("LTF")) {
-            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jlt " + inputNode.code.split(" ")[3]);        
 
 
@@ -145,21 +145,21 @@ public class TinyLinkedList {
             this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jle " + inputNode.code.split(" ")[3]);
         }else if (opcode.equals("LEF")) {
-            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jle " + inputNode.code.split(" ")[3]);
         
         }else if (opcode.equals("NE") || opcode.equals("NEI")) {
             this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jne " + inputNode.code.split(" ")[3]);
         }else if (opcode.equals("NEF")) {
-            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jne " + inputNode.code.split(" ")[3]);
         
         }else if (opcode.equals("EQI") || opcode.equals("EQ")) {
             this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jeq " + inputNode.code.split(" ")[3]);
         }else if (opcode.equals("EQF")){
-            this.addNode("cmpf " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
+            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) + " " + this.convertRegister(inputNode.code.split(" ")[2]));
             this.addNode("jeq " + inputNode.code.split(" ")[3]);
         
         }else if (opcode.equals("JUMP")) {
