@@ -63,6 +63,7 @@ public class MicroIRListener extends MicroBaseListener {
         return new String("$T" + registerNumber);
     }
 
+    /*
     private String lookupOpcode(String operator) {
         // we jump if the opposite of the desired
         // operator occurs, so we return the opposite
@@ -84,10 +85,54 @@ public class MicroIRListener extends MicroBaseListener {
                 return "compareOpERROR";
         }
     }
+    */
 
     private String lookupOpcode(
             String operator, String type) {
         // look up the opcode for that var type
+        if (operator.equals(">")) {
+            if (type.equals("INT"))
+                return "LEI";
+            if (type.equals("FLOAT"))
+                return "LEF";
+        }
+
+        if (operator.equals("<")) {
+            if (type.equals("INT"))
+                return "GEI";
+            if (type.equals("FLOAT"))
+                return "GEF";
+        }
+
+        if (operator.equals(">=")) {
+            if (type.equals("INT"))
+                return "LTI";
+            if (type.equals("FLOAT"))
+                return "LTF";
+        }
+
+        if (operator.equals("<=")) {
+            if (type.equals("INT"))
+                return "GTI";
+            if (type.equals("FLOAT"))
+                return "GTF";
+        }
+
+        if (operator.equals("!=")) {
+            if (type.equals("INT"))
+                return "EQI";
+            if (type.equals("FLOAT"))
+                return "EQF";
+        }
+
+        if (operator.equals("==")) {
+            if (type.equals("INT"))
+                return "NEI";
+            if (type.equals("FLOAT"))
+                return "NEF";
+        }
+
+
         if (operator.equals("+")) {
             if (type.equals("INT"))
                 return "ADDI";
@@ -442,8 +487,12 @@ public class MicroIRListener extends MicroBaseListener {
             label = "label" + getNewLabel();
         }
 
+        String compop = ptp.get(ctx.getChild(1)).getValue("compop");
+        String leftsideType = symbolTree.lookup(ptp.get(ctx.getChild(0)).getValue("primary")).type;
+        String opcode = lookupOpcode(compop, leftsideType);
+
         ll.addNode( 
-          lookupOpcode(ptp.get(ctx.getChild(1)).getValue("compop")) + " " + 
+          opcode + " " + 
           ptp.get(ctx.getChild(0)).getValue("primary") + " " + 
           ptp.get(ctx.getChild(2)).getValue("primary") + " " +
           label
