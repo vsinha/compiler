@@ -48,6 +48,7 @@ public class SymbolTableTree {
 
     public void createScope(String scopeName) {
         SymbolTable st = new SymbolTable(scopeName);
+        //System.out.println("created scope: " + scopeName);
         st.scopeType = "function";
         st.parent = currentScope;
         currentScope = st;
@@ -84,7 +85,10 @@ public class SymbolTableTree {
     }
 
     public void enterScopeSequentially() {
+        //System.out.println("entering a scope");
         currentScope = currentScope.children.get(currentScope.childIndex);
+        //System.out.println("just entered scope: " + currentScope.scopeName);
+        //System.out.println(currentScope.children);
 
         // increment
         currentScope.parent.childIndex += 1;
@@ -92,7 +96,9 @@ public class SymbolTableTree {
 
     public void exitScope() {
         // move up a level
+        //System.out.println("exiting scope: " + currentScope.scopeName);
         currentScope = currentScope.parent;
+        //System.out.println(currentScope.children);
     }
 
     public void addVariables(ArrayList<String> names, String type) {
