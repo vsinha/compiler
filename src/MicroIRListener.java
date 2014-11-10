@@ -237,8 +237,8 @@ public class MicroIRListener extends MicroBaseListener {
         if (!ctx.getText().isEmpty()) {
             symbolTree.exitScope();
             symbolTree.enterScopeSequentially();
-            addNodeIfKeyIsNotNull(ctx, "on_else_enter");
         }
+        addNodeIfKeyIsNotNull(ctx, "on_else_enter");
     }
 
     @Override public void exitElse_part(
@@ -248,8 +248,8 @@ public class MicroIRListener extends MicroBaseListener {
             // by the trailing "ELSIF", which is technically
             // part of the IF statement semantics...
             //symbolTree.exitScope();
-            addNodeIfKeyIsNotNull(ctx, "on_else_exit");
         }
+        addNodeIfKeyIsNotNull(ctx, "on_else_exit");
     }
 
     @Override public void enterWhile_stmt(
