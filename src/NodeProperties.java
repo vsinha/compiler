@@ -10,7 +10,8 @@ public class NodeProperties {
     static String[] _keys = {"primary", "assign_Lvalue",
                         "addop", "mulop", "compop",
                         "jump_label", "on_stmt_exit",
-                        "on_else_enter", "on_else_exit"};
+                        "on_else_enter", "on_else_exit",
+                        "endwhile_jump", "endwhile_label"};
     public static List<String> keys = Arrays.asList(_keys);
 
     public NodeProperties() {
