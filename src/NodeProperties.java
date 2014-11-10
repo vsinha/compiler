@@ -30,6 +30,10 @@ public class NodeProperties {
     }
 
     public String getValue(String key) {
+        if (!data.containsKey(key)) {
+            throw new IllegalArgumentException("key: \"" + key 
+                    + "\" not present in NodeProperties object");
+        }
         return data.get(key);
     }
 
