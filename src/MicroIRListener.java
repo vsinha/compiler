@@ -55,7 +55,7 @@ public class MicroIRListener extends MicroBaseListener {
     private String getNewRegister(String type) {
         registerNumber += 1;
         String registerName = new String("$T" + registerNumber);
-        symbolTree.addVariable(registerName, type);
+        symbolTree.addRegister(registerName, type);
         return registerName;
     }
 
@@ -274,9 +274,27 @@ public class MicroIRListener extends MicroBaseListener {
             storeOp = "STOREF";
         }
 
-        ll.addNode(storeOp + " " + 
-                   ptp.get(ctx).getValue("primary") + " " +
-                   Lvalue);
+        String Rvalue = ptp.get(ctx).getValue("primary");
+        // if the Rvalue is a variable, move it to a register first
+        Id RvalueId = symbolTree.lookup(Rvalue);
+        if (!RvalueId.isRegister()) {
+            System.out.println("here");
+            String temp = null;
+
+            if (RvalueId.type.equals("INT")) {
+              temp = getNewRegister("INT");
+              ll.addNode("STOREI " + Rvalue + " " + temp);
+            } else if (RvalueId.type.equals("FLOAT")) {
+              temp = getNewRegister("FLOAT");
+              ll.addNode("STOREF " + Rvalue + " " + temp);
+            } else {
+                System.out.println("Houston, we have a problem");
+            }
+
+            Rvalue = temp; // this is good code right?
+        }
+
+        ll.addNode(storeOp + " " + Rvalue + " " + Lvalue);
     }
 
     @Override public void exitId(
