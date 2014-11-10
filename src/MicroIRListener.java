@@ -125,7 +125,7 @@ public class MicroIRListener extends MicroBaseListener {
                 return "EQF";
         }
 
-        if (operator.equals("==")) {
+        if (operator.equals("=")) {
             if (type.equals("INT"))
                 return "NEI";
             if (type.equals("FLOAT"))
