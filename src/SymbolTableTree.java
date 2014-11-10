@@ -170,6 +170,11 @@ public class SymbolTableTree {
         currentScope.table.put(name, new Id(name, type));
     }
 
+    public void addRegister(String name, String type) {
+        addVariable(name, type);
+        currentScope.table.get(name).setIsRegister();
+    }
+
     private void checkForShadowInParents(SymbolTable node, String var) {
         if (node == null) {
             return;
