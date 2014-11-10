@@ -55,7 +55,7 @@ public class MicroIRListener extends MicroBaseListener {
     private String getNewRegister(String type) {
         registerNumber += 1;
         String registerName = new String("$T" + registerNumber);
-        symbolTree.addVariable(registerName, type);
+        symbolTree.addRegister(registerName, type);
         return registerName;
     }
 
@@ -188,12 +188,23 @@ public class MicroIRListener extends MicroBaseListener {
 
     @Override public void enterElse_part(
             MicroParser.Else_partContext ctx) {
-        addNodeIfKeyIsNotNull(ctx, "on_else_enter");
+
+        if (!ctx.getText().isEmpty()) {
+            symbolTree.exitScope();
+            symbolTree.enterScopeSequentially();
+            addNodeIfKeyIsNotNull(ctx, "on_else_enter");
+        }
     }
 
     @Override public void exitElse_part(
             MicroParser.Else_partContext ctx) {
-        addNodeIfKeyIsNotNull(ctx, "on_else_exit");
+        if (!ctx.getText().isEmpty()) {
+            // exiting the else part scope will be done
+            // by the trailing "ELSIF", which is technically
+            // part of the IF statement semantics...
+            //symbolTree.exitScope();
+            addNodeIfKeyIsNotNull(ctx, "on_else_exit");
+        }
     }
 
     @Override public void enterWhile_stmt(
@@ -263,15 +274,32 @@ public class MicroIRListener extends MicroBaseListener {
             storeOp = "STOREF";
         }
 
-        ll.addNode(storeOp + " " + 
-                   ptp.get(ctx).getValue("primary") + " " +
-                   Lvalue);
+        String Rvalue = ptp.get(ctx).getValue("primary");
+        // if the Rvalue is a variable, move it to a register first
+        Id RvalueId = symbolTree.lookup(Rvalue);
+        if (!RvalueId.isRegister()) {
+            System.out.println("here");
+            String temp = null;
+
+            if (RvalueId.type.equals("INT")) {
+              temp = getNewRegister("INT");
+              ll.addNode("STOREI " + Rvalue + " " + temp);
+            } else if (RvalueId.type.equals("FLOAT")) {
+              temp = getNewRegister("FLOAT");
+              ll.addNode("STOREF " + Rvalue + " " + temp);
+            } else {
+                System.out.println("Houston, we have a problem");
+            }
+
+            Rvalue = temp; // this is good code right?
+        }
+
+        ll.addNode(storeOp + " " + Rvalue + " " + Lvalue);
     }
 
     @Override public void exitId(
             MicroParser.IdContext ctx) {
         NodeProperties parentNodeProps = ptp.get(ctx.getParent());
-        //System.out.println("here: " + ctx.getParent().getText());
         
         // if we're directly the child of an assign statement
         if (ctx.getParent().getChild(1) != null
@@ -294,7 +322,6 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void exitPrimary(
             MicroParser.PrimaryContext ctx) {
         if (ctx.getChild(0).getText().equals("(")) {
-            //System.out.println("HERE");
             // our primary is a parenthesized expr [ie "(a + b)"]
             addNodeProp(ctx, "primary", 
                     ptp.get(ctx.getChild(1)).getValue("primary"));

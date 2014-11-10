@@ -10,13 +10,14 @@ public class SymbolTableTree {
         ArrayList<SymbolTable> children;
         LinkedHashMap<String, Id> table;
         
-        int childIndex = 0;
+        int childIndex;
 
         public SymbolTable (String scopeName) {
             this.scopeName = scopeName;
             parent = null;
             children = new ArrayList<SymbolTable>();
             table = new LinkedHashMap<String, Id>();
+            childIndex = 0;
         }
 
         public void printTable() {
@@ -47,11 +48,33 @@ public class SymbolTableTree {
 
     public void createScope(String scopeName) {
         SymbolTable st = new SymbolTable(scopeName);
+        //System.out.println("created scope: " + scopeName);
         st.scopeType = "function";
         st.parent = currentScope;
         currentScope = st;
         st.parent.children.add(st);
     }
+
+    public boolean isInteger(String s) {
+        try { 
+            Integer.parseInt(s); 
+        } catch(NumberFormatException e) { 
+            return false; 
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+
+    public boolean isFloat(String s) {
+        try {
+            Float.parseFloat(s);
+        } catch(NumberFormatException e) { 
+            return false; 
+        }
+        // only got here if we didn't return false
+        return true;
+    }
+
 
     public Id lookup(String varName) {
         Id id = null;
@@ -62,10 +85,12 @@ public class SymbolTableTree {
             id = _lookup(currentScope, varName);
         } catch (java.lang.NullPointerException e) {
             // lookup failed, it's a string int or float
-            if (varName.toLowerCase().contains(".")) {
+            if ( isFloat(varName) ) {
                 id = new Id(varName, "FLOAT");
-            } else {
+            } else if ( isInteger(varName) ) {
                 id = new Id(varName, "INT");
+            } else {
+                id = null;
             }
         }
 
@@ -83,7 +108,10 @@ public class SymbolTableTree {
     }
 
     public void enterScopeSequentially() {
+        //System.out.println("entering a scope");
         currentScope = currentScope.children.get(currentScope.childIndex);
+        //System.out.println("just entered scope: " + currentScope.scopeName);
+        //System.out.println(currentScope.children);
 
         // increment
         currentScope.parent.childIndex += 1;
@@ -91,7 +119,9 @@ public class SymbolTableTree {
 
     public void exitScope() {
         // move up a level
+        //System.out.println("exiting scope: " + currentScope.scopeName);
         currentScope = currentScope.parent;
+        //System.out.println(currentScope.children);
     }
 
     public void addVariables(ArrayList<String> names, String type) {
@@ -138,6 +168,11 @@ public class SymbolTableTree {
 
         // if it does, add it anyways but print a shadow warning
         currentScope.table.put(name, new Id(name, type));
+    }
+
+    public void addRegister(String name, String type) {
+        addVariable(name, type);
+        currentScope.table.get(name).setIsRegister();
     }
 
     private void checkForShadowInParents(SymbolTable node, String var) {

@@ -4,19 +4,29 @@ public class Id {
     String value;
     int size;
     int offset;
+    boolean isRegister;
 
     public Id (String name, String type) {
         this.name = name;
         this.type = type;
         this.value = null;
+        this.isRegister = false;
     }
-
 
     // for string variables
     public Id (String name, String type, String value) {
         this.name = name;
         this.type = type;
         this.value = value;
+        this.isRegister = false;
+    }
+
+    public void setIsRegister() {
+        this.isRegister = true;
+    }
+
+    public boolean isRegister() {
+        return this.isRegister;
     }
 
     public boolean isString() {
