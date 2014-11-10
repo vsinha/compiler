@@ -10,13 +10,14 @@ public class SymbolTableTree {
         ArrayList<SymbolTable> children;
         LinkedHashMap<String, Id> table;
         
-        int childIndex = 0;
+        int childIndex;
 
         public SymbolTable (String scopeName) {
             this.scopeName = scopeName;
             parent = null;
             children = new ArrayList<SymbolTable>();
             table = new LinkedHashMap<String, Id>();
+            childIndex = 0;
         }
 
         public void printTable() {
