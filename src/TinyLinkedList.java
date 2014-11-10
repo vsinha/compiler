@@ -188,7 +188,7 @@ public class TinyLinkedList {
             String number = register.replace("$T", "");
 
             int registerNumber = Integer.parseInt(number) - 1;
-            
+
             return "r" + String.valueOf(registerNumber);
         }else{
             return register;
@@ -199,7 +199,7 @@ public class TinyLinkedList {
     private void moveConversion(String operand1, String operand2){
 
         if (this.convertRegister(operand1).equals(operand1) && this.convertRegister(operand2).equals(operand2)){
-            System.out.println("error in tiny conversion: " + operand1 + " and " + operand2 + " are both variables. Node not added");
+            this.addNode("error in tiny conversion: " + operand1 + " and " + operand2 + " are both variables. Node not added");
         } else {
             this.addNode("move " + this.convertRegister(operand1) + " " + this.convertRegister(operand2));
         }
