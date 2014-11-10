@@ -486,12 +486,9 @@ public class MicroIRListener extends MicroBaseListener {
         }
 
         String compop = ptp.get(ctx.getChild(1)).getValue("compop");
-
         String leftsideVar = ptp.get(ctx.getChild(0)).getValue("primary");
         String leftsideType = symbolTree.lookup(leftsideVar).type;
-
         String rightsideVar = ptp.get(ctx.getChild(2)).getValue("primary");
-
         String opcode = lookupOpcode(compop, leftsideType);
 
         Id leftsideID = symbolTree.lookup(leftsideVar);
@@ -504,12 +501,12 @@ public class MicroIRListener extends MicroBaseListener {
             String temp = null;
             if (rightsideID.type.equals("INT")) {
                 temp = getNewRegister("INT");
-                System.out.println("STOREI " + rightsideID.name + " " + temp);
+                ll.addNode("STOREI " + rightsideID.name + " " + temp);
             } else if (rightsideID.type.equals("FLOAT")) {
                 temp = getNewRegister("FLOAT");
-                System.out.println("STOREF " + rightsideID.name + " " + temp);
+                ll.addNode("STOREF " + rightsideID.name + " " + temp);
             } else {
-                System.out.println ("Catastrophic typing error.");
+                System.out.println("Catastrophic typing error.");
             }
 
             rightsideVar = temp;
