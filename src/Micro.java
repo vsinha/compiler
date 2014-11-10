@@ -31,6 +31,7 @@ public class Micro {
 
             TinyLinkedList tinyll = new TinyLinkedList(listener.ll, listener.symbolTree);
             System.out.print(tinyll);
+            System.out.println();
 
 
         } catch (ParseCancellationException e) {

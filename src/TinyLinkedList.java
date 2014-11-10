@@ -64,10 +64,20 @@ public class TinyLinkedList {
 
     private void convertNode( IRLinkedList.Node inputNode){
 
-        String[] nodeArray = inputNode.code.split(" ");
-        String opcode = nodeArray[0];
+        String[] nodeArray = {};
+        String opcode = "";
 
-        if(opcode.equals("LABEL")){
+        try { 
+            nodeArray = inputNode.code.split(" ");
+            opcode = nodeArray[0];
+        } catch (NullPointerException e) {
+
+            opcode = inputNode.code;
+        }
+
+        if(opcode == null){
+            this.addNode("error in tiny conversion: opcode is null");
+        }else if(opcode.equals("LABEL")){
             this.addNode("label " + inputNode.code.split(" ")[1]);
         }else if (opcode.equals("ADDI")) {
             this.addNode("move " + this.convertRegister(nodeArray[1]) + " " + this.convertRegister(nodeArray[3]));
@@ -126,7 +136,7 @@ public class TinyLinkedList {
         }else if (opcode.equals("LINK")){
             //do nothing (maybe)
         }else{
-            this.addNode("error in tiny conversion " + inputNode);
+            this.addNode("error in tiny conversion: opcode is " + inputNode);
         }
     }
 
