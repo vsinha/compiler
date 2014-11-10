@@ -442,7 +442,6 @@ public class MicroIRListener extends MicroBaseListener {
                     );
 
             addNodeProp(ctx, "primary", temp);
-            //System.out.println(";added new add primary: " + temp);
         }
     }
      
@@ -487,15 +486,42 @@ public class MicroIRListener extends MicroBaseListener {
         }
 
         String compop = ptp.get(ctx.getChild(1)).getValue("compop");
-        String leftsideType = symbolTree.lookup(ptp.get(ctx.getChild(0)).getValue("primary")).type;
+
+        String leftsideVar = ptp.get(ctx.getChild(0)).getValue("primary");
+        String leftsideType = symbolTree.lookup(leftsideVar).type;
+
+        String rightsideVar = ptp.get(ctx.getChild(2)).getValue("primary");
+
         String opcode = lookupOpcode(compop, leftsideType);
 
+        Id leftsideID = symbolTree.lookup(leftsideVar);
+        Id rightsideID = symbolTree.lookup(rightsideVar);
+
+        // if the leftsideID is not a register (ie a declared variable) AND
+        // the second comp is too, then we need to move the second comp into a 
+        // temporary register and compare using that.
+        if (!leftsideID.isRegister() && !rightsideID.isRegister()) {
+            String temp = null;
+            if (rightsideID.type.equals("INT")) {
+                temp = getNewRegister("INT");
+                System.out.println("STOREI " + rightsideID.name + " " + temp);
+            } else if (rightsideID.type.equals("FLOAT")) {
+                temp = getNewRegister("FLOAT");
+                System.out.println("STOREF " + rightsideID.name + " " + temp);
+            } else {
+                System.out.println ("Catastrophic typing error.");
+            }
+
+            rightsideVar = temp;
+
+        } 
+
         ll.addNode( 
-          opcode + " " + 
-          ptp.get(ctx.getChild(0)).getValue("primary") + " " + 
-          ptp.get(ctx.getChild(2)).getValue("primary") + " " +
-          label
-        );
+                opcode + " " + 
+                leftsideVar + " " + 
+                rightsideVar + " " +
+                label
+                );
     }
 
     @Override public void enterId_list(MicroParser.Id_listContext ctx) {
