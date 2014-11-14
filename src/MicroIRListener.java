@@ -140,9 +140,8 @@ public class MicroIRListener extends MicroBaseListener {
                 return "DIVI";
             if (type.equals("FLOAT"))
                 return "DIVF";
-        } else {
-           return "ERROR";
         }
+        return "ERROR";
     }
 
     private String typedStoreOp(String varname) {
