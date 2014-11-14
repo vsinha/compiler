@@ -163,6 +163,19 @@ public class MicroIRListener extends MicroBaseListener {
         return "ERROR";
     }
 
+    private String typedStoreOp(String varname) {
+        String type = symbolTree.lookup(varname).type;
+
+        if (type.equals("INT")) {
+            return "STOREI";
+        } else if (type.equals("FLOAT")) {
+            return "STOREF";
+        } else { 
+            return "ERROR";
+        }
+    }
+
+
     public void addNodeProp(ParseTree ctx, 
             String key, String value) {
         
