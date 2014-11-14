@@ -95,72 +95,54 @@ public class MicroIRListener extends MicroBaseListener {
                 return "LEI";
             if (type.equals("FLOAT"))
                 return "LEF";
-        }
-
-        if (operator.equals("<")) {
+        } else if (operator.equals("<")) {
             if (type.equals("INT"))
                 return "GEI";
             if (type.equals("FLOAT"))
                 return "GEF";
-        }
-
-        if (operator.equals(">=")) {
+        } else if (operator.equals(">=")) {
             if (type.equals("INT"))
                 return "LTI";
             if (type.equals("FLOAT"))
                 return "LTF";
-        }
-
-        if (operator.equals("<=")) {
+        } else if (operator.equals("<=")) {
             if (type.equals("INT"))
                 return "GTI";
             if (type.equals("FLOAT"))
                 return "GTF";
-        }
-
-        if (operator.equals("!=")) {
+        } else if (operator.equals("!=")) {
             if (type.equals("INT"))
                 return "EQI";
             if (type.equals("FLOAT"))
                 return "EQF";
-        }
-
-        if (operator.equals("=")) {
+        } else if (operator.equals("=")) {
             if (type.equals("INT"))
                 return "NEI";
             if (type.equals("FLOAT"))
                 return "NEF";
-        }
-
-
-        if (operator.equals("+")) {
+        } else if (operator.equals("+")) {
             if (type.equals("INT"))
                 return "ADDI";
             if (type.equals("FLOAT"))
                 return "ADDF";
-        }
-
-        if (operator.equals("-")) {
+        } else if (operator.equals("-")) {
             if (type.equals("INT"))
                 return "SUBI";
             if (type.equals("FLOAT"))
                 return "SUBF";
-        }
-
-        if (operator.equals("*")) {
+        } else if (operator.equals("*")) {
             if (type.equals("INT"))
                 return "MULTI";
             if (type.equals("FLOAT"))
                 return "MULTF";
-        }
-
-        if (operator.equals("/")) {
+        } else if (operator.equals("/")) {
             if (type.equals("INT"))
                 return "DIVI";
             if (type.equals("FLOAT"))
                 return "DIVF";
+        } else {
+           return "ERROR";
         }
-        return "ERROR";
     }
 
     private String typedStoreOp(String varname) {
