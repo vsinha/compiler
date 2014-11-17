@@ -144,16 +144,19 @@ public class MicroIRListener extends MicroBaseListener {
         return "ERROR";
     }
 
-    private String typedStoreOp(String varname) {
-        String type = symbolTree.lookup(varname).type;
-
-        if (type.equals("INT")) {
+    private String typedStoreOp(Id varID) {
+        if (varID.type.equals("INT")) {
             return "STOREI";
-        } else if (type.equals("FLOAT")) {
+        } else if (varID.type.equals("FLOAT")) {
             return "STOREF";
         } else { 
             return "ERROR";
         }
+    }
+
+    private String typedStoreOp(String varname) {
+        // look up the Id and call the above function with that
+        return typedStoreOp(symbolTree.lookup(varname));
     }
 
 
@@ -304,16 +307,9 @@ public class MicroIRListener extends MicroBaseListener {
         //System.out.println("exiting assign: " + ctx.getText());
 
         String Lvalue = ptp.get(ctx).getValue("assign_Lvalue");
-        String storeOp = "ERROR";
-        String LvalueType = symbolTree.lookup(Lvalue).type;
-
-        if (LvalueType.equals("INT")) {
-            storeOp = "STOREI";
-        } else if (LvalueType.equals("FLOAT")) {
-            storeOp = "STOREF";
-        }
-
         String Rvalue = ptp.get(ctx).getValue("primary");
+        String storeOp = typedStoreOp(Lvalue);
+
         // if the Rvalue is a variable, move it to a register first
         Id RvalueId = symbolTree.lookup(Rvalue);
         if (!RvalueId.isRegister()) {
