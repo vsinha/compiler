@@ -511,24 +511,34 @@ public class MicroIRListener extends MicroBaseListener {
                 );
     }
 
-    @Override public void enterId_list(MicroParser.Id_listContext ctx) {
-        for (String id : ctx.ids){
-            if(ctx.getParent().getChild(0).getText().equals("WRITE")){
 
-                if (symbolTree.lookup(id).type.equals("INT")){
-                    ll.addNode("WRITEI " + id);
-                }else if (symbolTree.lookup(id).type.equals("FLOAT")) {
-                    ll.addNode("WRITEF " + id);
-                }else if (id.equals("newline")) {
-                    ll.addNode("WRITES " + id);
-                }
-            }else if (ctx.getParent().getChild(0).getText().equals("READ")) {
-                if (symbolTree.lookup(id).type.equals("INT")){
-                    ll.addNode("READI " + id);
-                }else if (symbolTree.lookup(id).type.equals("FLOAT")) {
-                    ll.addNode("READF " + id);
-                }
+    @Override public void enterId_list(MicroParser.Id_listContext ctx) {
+        for (String varName : ctx.ids) {
+            String token = ctx.getParent().getChild(0).getText();
+            String varType = symbolTree.lookup(varName).type;
+            String opcode = "ERROR";
+
+            if (token.equals("WRITE")) {
+                if (varType.equals("INT")) {
+                    opcode = "WRITEI";
+                } else if (varType.equals("FLOAT")) {
+                    opcode = "WRITEF";
+                } else if (varType.equals("STRING")) { 
+                    opcode = "WRITES";
+                } 
+
+                ll.addNode(opcode + " " + varName);
+
+            } else if (token.equals("READ")) {
+                if (varType.equals("INT")) {
+                    opcode = "READI";
+                } else if (varType.equals("FLOAT")) {
+                    opcode = "READF";
+                } 
+
+                ll.addNode(opcode + " " + varName);
             }
+
         }
     }
 }
