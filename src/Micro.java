@@ -33,10 +33,10 @@ public class Micro {
             System.out.print(";IR code");
             // newlines are printed by the toString...
             System.out.println(listener.ll);
-            System.out.println(";tiny code");
+            System.out.print(";tiny code");
 
             TinyLinkedList tinyll = new TinyLinkedList(listener.ll, listener.symbolTree);
-            //System.out.print(tinyll);
+            System.out.print(tinyll);
             System.out.println();
 
 
