@@ -52,7 +52,7 @@ public class TinyLinkedList {
 
 
     public void addNode(String code) {
-        System.out.println(code);
+        //System.out.println(code);
         Node newNode = new Node(code);
 
         newNode.prev = tail;
@@ -84,6 +84,7 @@ public class TinyLinkedList {
             String labelName = tokens[1];
             // check to jump over other function declarations
             if (finishedAddingGlobals == false && !labelName.equals("main")) {
+                addNode("push");
                 pushRegisters(NUMREGISTERS);
                 addNode("jsr main");
                 addNode("sys halt");
@@ -185,17 +186,17 @@ public class TinyLinkedList {
         } else if (opcode.equals("JUMP")) {
             addNode("jmp " + tokens[1]);
         } else if (opcode.equals("READI")) {
-            addNode("sys readi " + tokens[1]);
+            addNode("sys readi " + convertRegister(tokens[1]));
         } else if (opcode.equals("READF")) {
-            addNode("sys readr " + tokens[1]);
+            addNode("sys readr " + convertRegister(tokens[1]));
         } else if (opcode.equals("WRITEI")) {
-            addNode("sys writei " + tokens[1]);
+            addNode("sys writei " + convertRegister(tokens[1]));
         } else if (opcode.equals("WRITEF")) {
-            addNode("sys writer " + tokens[1]);
+            addNode("sys writer " + convertRegister(tokens[1]));
         } else if (opcode.equals("WRITES")) {
-            addNode("sys writes " + tokens[1]);
+            addNode("sys writes " + convertRegister(tokens[1]));
         } else if (opcode.equals("RET")) {
-            addNode("unlink");
+            addNode("unlnk");
             addNode("ret");
         } else if (opcode.equals("LINK")) {
             int numLocals = symbols.functions.get(currentFunction).numLocals();
