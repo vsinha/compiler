@@ -13,12 +13,18 @@ public class Micro {
             MicroParser parser = new MicroParser(tokens);
             parser.setErrorHandler(new BailErrorStrategy());
 
+            /*
+            String[] ruleNames = parser.getRuleNames();
+            for (int i = 0; i < ruleNames.length; i++) {
+                System.out.println(i + ": " + ruleNames[i]);
+            }
+            */
+
             ParseTree tree = parser.program();
             //parser.symbolTree.printTree();
 
             ParseTreeWalker walker = new ParseTreeWalker();
             MicroIRListener listener = new MicroIRListener(parser.symbolTree);
-
 
             // initiate walk of tree with listener
             walker.walk(listener, tree); 
