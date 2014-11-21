@@ -4,6 +4,8 @@ public class TinyLinkedList {
     Node head;
     Node tail;
 
+    static final int NUMREGISTERS = 15;
+
     class Node {
         Node prev;
         Node next;
@@ -82,6 +84,7 @@ public class TinyLinkedList {
             String labelName = tokens[1];
             // check to jump over other function declarations
             if (finishedAddingGlobals == false && !labelName.equals("main")) {
+                pushRegisters(NUMREGISTERS);
                 addNode("jsr main");
                 addNode("sys halt");
                 finishedAddingGlobals = true;
@@ -204,9 +207,9 @@ public class TinyLinkedList {
                 addNode("push");
             }
         } else if (opcode.equals("JSR")) {
-            addNode("push all registers...");
+            pushRegisters(NUMREGISTERS);
             addNode("jsr " + tokens[1]);
-            addNode("pop all registers...");
+            popRegisters(NUMREGISTERS);
         } else if (opcode.equals("POP")) {
             if (tokens.length > 1) {
                 addNode("pop " + convertRegister(tokens[1]));
@@ -218,6 +221,17 @@ public class TinyLinkedList {
         }
     }
 
+    private void pushRegisters(int num) {
+        for (int i = 0; i < num; i++) {
+            addNode("push r" + i);
+        }
+    }
+
+    private void popRegisters(int num) {
+        for (int i = num - 1; i >= 0; i--) {
+            addNode("pop r" + i);
+        }
+    }
     private String convertRegister(String register){
         if (register.charAt(0) == '$'){
             if (register.charAt(1) == 'T') {
@@ -230,8 +244,11 @@ public class TinyLinkedList {
                 return "$-" + String.valueOf(registerNumber);
             } else if (register.charAt(1) == 'P') {
                 String number = register.replace("$P", "");
-                int registerNumber = Integer.parseInt(number);
-                return "$p" + String.valueOf(registerNumber);
+                int registerNumber = Integer.parseInt(number) - 1 + 2 + NUMREGISTERS;
+                return "$" + String.valueOf(registerNumber);
+            } else if (register.charAt(1) == 'R') {
+                int returnLoc = symbols.functions.get(currentFunction).numParams() + 2 + NUMREGISTERS;
+                return "$" + returnLoc; 
             } else {
                 return "ERR";
             }
