@@ -11,8 +11,6 @@ public class IRLinkedList {
             this.code = code;
             this.prev = null;
             this.next = null;
-            //this.opcode = opcode;
-
         }
 
         @Override public String toString () {
