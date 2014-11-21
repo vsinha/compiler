@@ -173,6 +173,22 @@ public class TinyLinkedList {
             this.addNode("ret");
         } else if (opcode.equals("LINK")) {
             //do nothing (maybe)
+        } else if (opcode.equals("PUSH")) {
+            if (tokens.length > 1) {
+                this.addNode("push " + convertRegister(tokens[1]));
+            } else {
+                this.addNode("push");
+            }
+        } else if (opcode.equals("JSR")) {
+            this.addNode("push all registers...");
+            this.addNode("jsr " + tokens[1]);
+            this.addNode("pop all registers...");
+        } else if (opcode.equals("POP")) {
+            if (tokens.length > 1) {
+                this.addNode("pop " + convertRegister(tokens[1]));
+            } else {
+                this.addNode("pop");
+            }
         } else {
             this.addNode("error in tiny conversion: opcode is: " + inputNode);
         }
@@ -180,9 +196,21 @@ public class TinyLinkedList {
 
     private String convertRegister(String register){
         if (register.charAt(0) == '$'){
-            String number = register.replace("$T", "");
-            int registerNumber = Integer.parseInt(number) - 1;
-            return "r" + String.valueOf(registerNumber);
+            if (register.charAt(1) == 'T') {
+                String number = register.replace("$T", "");
+                int registerNumber = Integer.parseInt(number) - 1;
+                return "r" + String.valueOf(registerNumber);
+            } else if (register.charAt(1) == 'L') {
+                String number = register.replace("$L", "");
+                int registerNumber = Integer.parseInt(number);
+                return "$-" + String.valueOf(registerNumber);
+            } else if (register.charAt(1) == 'P') {
+                String number = register.replace("$P", "");
+                int registerNumber = Integer.parseInt(number);
+                return "$p" + String.valueOf(registerNumber);
+            } else {
+                return "ERR";
+            }
 
         } else {
             return register;
