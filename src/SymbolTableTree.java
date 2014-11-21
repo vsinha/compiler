@@ -9,6 +9,9 @@ public class SymbolTableTree {
         SymbolTable parent;
         ArrayList<SymbolTable> children;
         LinkedHashMap<String, Id> table; // these are local vars
+
+        int localVarIndex;
+        int paramIndex;
         
         int childIndex;
 
@@ -18,6 +21,9 @@ public class SymbolTableTree {
             children = new ArrayList<SymbolTable>();
             table = new LinkedHashMap<String, Id>();
             childIndex = 0;
+
+            localVarIndex = 1;
+            paramIndex = 1;
         }
 
         public void printTable() {
@@ -33,10 +39,14 @@ public class SymbolTableTree {
     SymbolTable currentScope = null;
     int blockCount = 1;
 
+    // HashMap<function_name, function_props_object>
+    public HashMap<String, FunctionProps> functions;
+
     public SymbolTableTree () { 
         // push GLOBAL scope to start us off
         global = new SymbolTable("GLOBAL");
         currentScope = global;
+        functions = new HashMap<String, FunctionProps>();
     }
 
     // come up with a "BLOCK %d" name 
@@ -73,7 +83,6 @@ public class SymbolTableTree {
         // only got here if we didn't return false
         return true;
     }
-
 
     public Id lookup(String varName) {
         Id id = null;
@@ -136,9 +145,47 @@ public class SymbolTableTree {
         currentScope.table.put(name, new Id(name, type));
     }
 
+    public void addLocals(ArrayList<String> names, String type) {
+        for (String name : names) {
+            addLocal(name, type);
+        }
+    }
+
+    public String getName(String varName) {
+        String stackAddress = lookup(varName).getStackAddress();
+        if (stackAddress != null) {
+            return stackAddress;
+        } else {
+            return varName;
+        }
+    }
+
+    public String getName(Id varID) {
+        return getName(varID.name);
+    }
+
+    public void addLocal(String name, String type) {
+        addVariable(name, type);
+        currentScope.table.get(name).setStackAddress("$L" + currentScope.localVarIndex);
+        currentScope.localVarIndex += 1;
+    }
+
     public void addRegister(String name, String type) {
         addVariable(name, type);
         currentScope.table.get(name).setIsRegister();
+    }
+
+    public void addParameter(String name, String type) {
+        addVariable(name, type);
+        currentScope.table.get(name).setIsParameter();
+        currentScope.table.get(name).setStackAddress("$P" + currentScope.paramIndex);
+        //currentScope.paramIndex += 1;
+    }
+
+    public void setIsParameter(String name) {
+        currentScope.table.get(name).setIsParameter();
+        currentScope.table.get(name).setStackAddress("$P" + currentScope.paramIndex);
+        currentScope.paramIndex += 1;
     }
 
     private void checkForShadowInParents(SymbolTable node, String var) {
