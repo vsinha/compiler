@@ -627,7 +627,7 @@ public class MicroIRListener extends MicroBaseListener {
                     opcode = "WRITES";
                 } 
 
-                ll.addNode(opcode + " " + varName);
+                ll.addNode(opcode + " " + symbolTree.getName(varName));
 
             } else if (token.equals("READ")) {
                 if (varType.equals("INT")) {
