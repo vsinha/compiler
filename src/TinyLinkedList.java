@@ -30,19 +30,19 @@ public class TinyLinkedList {
                 Id var = symbols.lookup(key);
                 String varName = symbols.global.table.get(key).toString().split(" ")[1];
                 if (var.isString()) {
-                    this.addNode("str " + varName + " " + var.value);
+                    addNode("str " + varName + " " + var.value);
                 } else {
-                    this.addNode("var " + varName);
+                    addNode("var " + varName);
                 }
             }
 
         irll.head = irll.head.next;
 
         while( irll.head != null ){
-            this.convertNode(irll.head);
+            convertNode(irll.head);
             irll.head = irll.head.next;
         }
-        this.addNode("end");
+        addNode("end");
     }
 
 
@@ -58,7 +58,6 @@ public class TinyLinkedList {
     // check this flag to know that we should jump over other function
     // declarations to start in 'main'
     private boolean finishedAddingGlobals = false;
-    
 
     private void convertNode( IRLinkedList.Node inputNode){
         String[] nodeArray = {};
@@ -74,133 +73,133 @@ public class TinyLinkedList {
         String[] tokens = inputNode.code.split(" ");
 
         if (opcode == null) {
-            this.addNode("error in tiny conversion: opcode is null");
+            addNode("error in tiny conversion: opcode is null");
         } else if(opcode.equals("LABEL")) {
             if (finishedAddingGlobals == false && !tokens[1].equals("main")) {
-                this.addNode("jsr main");
-                this.addNode("sys halt");
+                addNode("jsr main");
+                addNode("sys halt");
                 finishedAddingGlobals = true;
             }
-            this.addNode("label " + tokens[1]);
+            addNode("label " + tokens[1]);
         } else if (opcode.equals("ADDI")) {
-            this.moveConversion(nodeArray[1], nodeArray[3]);
-            this.addNode("addi " + this.convertRegister(nodeArray[2]) + " " 
-                    + this.convertRegister(nodeArray[3]));
+            moveConversion(nodeArray[1], nodeArray[3]);
+            addNode("addi " + convertRegister(nodeArray[2]) + " " 
+                    + convertRegister(nodeArray[3]));
         } else if (opcode.equals("ADDF")) {
-            this.moveConversion(nodeArray[1], nodeArray[3]);
-            this.addNode("addr " + this.convertRegister(nodeArray[2]) + " " 
-                    + this.convertRegister(nodeArray[3]));
+            moveConversion(nodeArray[1], nodeArray[3]);
+            addNode("addr " + convertRegister(nodeArray[2]) + " " 
+                    + convertRegister(nodeArray[3]));
         } else if (opcode.equals("SUBI")) {
-            this.moveConversion(nodeArray[1], nodeArray[3]);
-            this.addNode("subi " + this.convertRegister(nodeArray[2]) + " " 
-                    + this.convertRegister(nodeArray[3]));
+            moveConversion(nodeArray[1], nodeArray[3]);
+            addNode("subi " + convertRegister(nodeArray[2]) + " " 
+                    + convertRegister(nodeArray[3]));
         } else if (opcode.equals("SUBF")) {
-            this.moveConversion(nodeArray[1], nodeArray[3]);
-            this.addNode("subr " + this.convertRegister(nodeArray[2]) + " " 
-                    + this.convertRegister(nodeArray[3]));
+            moveConversion(nodeArray[1], nodeArray[3]);
+            addNode("subr " + convertRegister(nodeArray[2]) + " " 
+                    + convertRegister(nodeArray[3]));
         } else if (opcode.equals("MULTI")) {
-            this.moveConversion(nodeArray[1], nodeArray[3]);
-            this.addNode("muli " + this.convertRegister(nodeArray[2]) + " " 
-                    + this.convertRegister(nodeArray[3]));
+            moveConversion(nodeArray[1], nodeArray[3]);
+            addNode("muli " + convertRegister(nodeArray[2]) + " " 
+                    + convertRegister(nodeArray[3]));
         } else if (opcode.equals("MULTF")) {
-            this.moveConversion(nodeArray[1], nodeArray[3]);
-            this.addNode("mulr " + this.convertRegister(nodeArray[2]) + " " 
-                    + this.convertRegister(nodeArray[3]));
+            moveConversion(nodeArray[1], nodeArray[3]);
+            addNode("mulr " + convertRegister(nodeArray[2]) + " " 
+                    + convertRegister(nodeArray[3]));
         } else if (opcode.equals("DIVI")) {
-            this.moveConversion(nodeArray[1], nodeArray[3]);
-            this.addNode("divi " + this.convertRegister(nodeArray[2]) + " " 
-                    + this.convertRegister(nodeArray[3]));
+            moveConversion(nodeArray[1], nodeArray[3]);
+            addNode("divi " + convertRegister(nodeArray[2]) + " " 
+                    + convertRegister(nodeArray[3]));
         } else if (opcode.equals("DIVF")) {
-            this.moveConversion(nodeArray[1], nodeArray[3]);
-            this.addNode("divr " + this.convertRegister(nodeArray[2]) + " " 
-                    + this.convertRegister(nodeArray[3]));
+            moveConversion(nodeArray[1], nodeArray[3]);
+            addNode("divr " + convertRegister(nodeArray[2]) + " " 
+                    + convertRegister(nodeArray[3]));
         } else if (opcode.equals("STOREI")) {
-            this.moveConversion(nodeArray[1], nodeArray[2]);
+            moveConversion(nodeArray[1], nodeArray[2]);
         } else if (opcode.equals("STOREF")) {
-            this.moveConversion(nodeArray[1], nodeArray[2]);
+            moveConversion(nodeArray[1], nodeArray[2]);
         } else if (opcode.equals("GT") || opcode.equals("GTI")) {
-            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jgt " + tokens[3]);
+            addNode("cmpi " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jgt " + tokens[3]);
         } else if (opcode.equals("GTF")) {
-            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jgt " + tokens[3]);
+            addNode("cmpr " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jgt " + tokens[3]);
         } else if (opcode.equals("GE") || opcode.equals("GEI")) {
-            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jge " + tokens[3]);
+            addNode("cmpi " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jge " + tokens[3]);
         } else if (opcode.equals("GEF")) {
-            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jge " + tokens[3]);
+            addNode("cmpr " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jge " + tokens[3]);
         } else if (opcode.equals("LT") || opcode.equals("LTI")) {
-            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jlt " + tokens[3]);
+            addNode("cmpi " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jlt " + tokens[3]);
         } else if (opcode.equals("LTF")) {
-            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jlt " + tokens[3]);        
+            addNode("cmpr " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jlt " + tokens[3]);        
         } else if (opcode.equals("LE") || opcode.equals("LEI")) {
-            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jle " + tokens[3]);
+            addNode("cmpi " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jle " + tokens[3]);
         } else if (opcode.equals("LEF")) {
-            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jle " + tokens[3]);
+            addNode("cmpr " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jle " + tokens[3]);
         } else if (opcode.equals("NE") || opcode.equals("NEI")) {
-            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jne " + tokens[3]);
+            addNode("cmpi " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jne " + tokens[3]);
         } else if (opcode.equals("NEF")) {
-            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jne " + tokens[3]);
+            addNode("cmpr " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jne " + tokens[3]);
         } else if (opcode.equals("EQI") || opcode.equals("EQ")) {
-            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jeq " + tokens[3]);
+            addNode("cmpi " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jeq " + tokens[3]);
         } else if (opcode.equals("EQF")){
-            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
-                    + " " + this.convertRegister(tokens[2]));
-            this.addNode("jeq " + tokens[3]);
+            addNode("cmpr " + convertRegister(tokens[1]) 
+                    + " " + convertRegister(tokens[2]));
+            addNode("jeq " + tokens[3]);
         } else if (opcode.equals("JUMP")) {
-            this.addNode("jmp " + tokens[1]);
+            addNode("jmp " + tokens[1]);
         } else if (opcode.equals("READI")) {
-            this.addNode("sys readi " + tokens[1]);
+            addNode("sys readi " + tokens[1]);
         } else if (opcode.equals("READF")) {
-            this.addNode("sys readr " + tokens[1]);
+            addNode("sys readr " + tokens[1]);
         } else if (opcode.equals("WRITEI")) {
-            this.addNode("sys writei " + tokens[1]);
+            addNode("sys writei " + tokens[1]);
         } else if (opcode.equals("WRITEF")) {
-            this.addNode("sys writer " + tokens[1]);
+            addNode("sys writer " + tokens[1]);
         } else if (opcode.equals("WRITES")) {
-            this.addNode("sys writes " + tokens[1]);
+            addNode("sys writes " + tokens[1]);
         } else if (opcode.equals("RET")) {
-            this.addNode("unlink");
-            this.addNode("ret");
+            addNode("unlink");
+            addNode("ret");
         } else if (opcode.equals("LINK")) {
             //do nothing (maybe)
         } else if (opcode.equals("PUSH")) {
             if (tokens.length > 1) {
-                this.addNode("push " + convertRegister(tokens[1]));
+                addNode("push " + convertRegister(tokens[1]));
             } else {
-                this.addNode("push");
+                addNode("push");
             }
         } else if (opcode.equals("JSR")) {
-            this.addNode("push all registers...");
-            this.addNode("jsr " + tokens[1]);
-            this.addNode("pop all registers...");
+            addNode("push all registers...");
+            addNode("jsr " + tokens[1]);
+            addNode("pop all registers...");
         } else if (opcode.equals("POP")) {
             if (tokens.length > 1) {
-                this.addNode("pop " + convertRegister(tokens[1]));
+                addNode("pop " + convertRegister(tokens[1]));
             } else {
-                this.addNode("pop");
+                addNode("pop");
             }
         } else {
-            this.addNode("error in tiny conversion: opcode is: " + inputNode);
+            addNode("error in tiny conversion: opcode is: " + inputNode);
         }
     }
 
@@ -229,15 +228,15 @@ public class TinyLinkedList {
 
 
     private void moveConversion(String operand1, String operand2){
-        if (this.convertRegister(operand1).equals(operand1) 
-                && this.convertRegister(operand2).equals(operand2)){
-            this.addNode("error in tiny conversion: " 
+        if (convertRegister(operand1).equals(operand1) 
+                && convertRegister(operand2).equals(operand2)){
+            addNode("error in tiny conversion: " 
                     + operand1 + " and " 
                     + operand2 + " are both variables. Node not added");
         } else {
-            this.addNode("move " 
-                    + this.convertRegister(operand1) + " " 
-                    + this.convertRegister(operand2));
+            addNode("move " 
+                    + convertRegister(operand1) + " " 
+                    + convertRegister(operand2));
         }
     }
 
