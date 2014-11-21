@@ -41,6 +41,7 @@ public class SymbolTableTree {
 
     // HashMap<function_name, function_props_object>
     public HashMap<String, FunctionProps> functions;
+    private String currentFunction;
 
     public SymbolTableTree () { 
         // push GLOBAL scope to start us off
@@ -62,6 +63,10 @@ public class SymbolTableTree {
         st.parent = currentScope;
         currentScope = st;
         st.parent.children.add(st);
+
+        currentFunction = scopeName;
+
+        functions.put(currentFunction, new FunctionProps(currentFunction));
     }
 
     public boolean isInteger(String s) {
@@ -168,6 +173,8 @@ public class SymbolTableTree {
         addVariable(name, type);
         currentScope.table.get(name).setStackAddress("$L" + currentScope.localVarIndex);
         currentScope.localVarIndex += 1;
+
+        functions.get(currentFunction).addLocal(name, type);
     }
 
     public void addRegister(String name, String type) {
