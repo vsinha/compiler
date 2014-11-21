@@ -20,10 +20,12 @@ public class TinyLinkedList {
         }
     }
 
+    SymbolTableTree symbols;
 
     public TinyLinkedList(IRLinkedList irll, SymbolTableTree symbols) {
         head = new Node("");
         tail = head;
+        this.symbols = symbols;
 
             Set<String> keys = symbols.global.table.keySet();
             for (String key : keys) {
