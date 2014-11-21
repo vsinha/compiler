@@ -61,6 +61,7 @@ public class TinyLinkedList {
     // check this flag to know that we should jump over other function
     // declarations to start in 'main'
     private boolean finishedAddingGlobals = false;
+    private String currentFunction = "";
 
     private void convertNode( IRLinkedList.Node inputNode){
         String[] nodeArray = {};
@@ -78,11 +79,20 @@ public class TinyLinkedList {
         if (opcode == null) {
             addNode("error in tiny conversion: opcode is null");
         } else if(opcode.equals("LABEL")) {
-            if (finishedAddingGlobals == false && !tokens[1].equals("main")) {
+            String labelName = tokens[1];
+            // check to jump over other function declarations
+            if (finishedAddingGlobals == false && !labelName.equals("main")) {
                 addNode("jsr main");
                 addNode("sys halt");
                 finishedAddingGlobals = true;
             }
+
+            // check if the label we're at is a function name
+            if (symbols.functions.containsKey(labelName)) {
+                currentFunction = labelName;
+            }
+
+
             addNode("label " + tokens[1]);
         } else if (opcode.equals("ADDI")) {
             moveConversion(nodeArray[1], nodeArray[3]);
@@ -168,6 +178,7 @@ public class TinyLinkedList {
             addNode("cmpr " + convertRegister(tokens[1]) 
                     + " " + convertRegister(tokens[2]));
             addNode("jeq " + tokens[3]);
+
         } else if (opcode.equals("JUMP")) {
             addNode("jmp " + tokens[1]);
         } else if (opcode.equals("READI")) {
@@ -184,7 +195,8 @@ public class TinyLinkedList {
             addNode("unlink");
             addNode("ret");
         } else if (opcode.equals("LINK")) {
-            //do nothing (maybe)
+            int numLocals = symbols.functions.get(currentFunction).numLocals();
+            addNode("link " + numLocals);
         } else if (opcode.equals("PUSH")) {
             if (tokens.length > 1) {
                 addNode("push " + convertRegister(tokens[1]));
