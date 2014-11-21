@@ -66,10 +66,12 @@ public class TinyLinkedList {
             opcode = inputNode.code;
         }
 
+        String[] tokens = inputNode.code.split(" ");
+
         if (opcode == null) {
             this.addNode("error in tiny conversion: opcode is null");
         } else if(opcode.equals("LABEL")) {
-            this.addNode("label " + inputNode.code.split(" ")[1]);
+            this.addNode("label " + tokens[1]);
         } else if (opcode.equals("ADDI")) {
             this.moveConversion(nodeArray[1], nodeArray[3]);
             this.addNode("addi " + this.convertRegister(nodeArray[2]) + " " 
@@ -107,67 +109,68 @@ public class TinyLinkedList {
         } else if (opcode.equals("STOREF")) {
             this.moveConversion(nodeArray[1], nodeArray[2]);
         } else if (opcode.equals("GT") || opcode.equals("GTI")) {
-            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jgt " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jgt " + tokens[3]);
         } else if (opcode.equals("GTF")) {
-            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jgt " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jgt " + tokens[3]);
         } else if (opcode.equals("GE") || opcode.equals("GEI")) {
-            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jge " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jge " + tokens[3]);
         } else if (opcode.equals("GEF")) {
-            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jge " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jge " + tokens[3]);
         } else if (opcode.equals("LT") || opcode.equals("LTI")) {
-            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jlt " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jlt " + tokens[3]);
         } else if (opcode.equals("LTF")) {
-            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jlt " + inputNode.code.split(" ")[3]);        
+            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jlt " + tokens[3]);        
         } else if (opcode.equals("LE") || opcode.equals("LEI")) {
-            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jle " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jle " + tokens[3]);
         } else if (opcode.equals("LEF")) {
-            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jle " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jle " + tokens[3]);
         } else if (opcode.equals("NE") || opcode.equals("NEI")) {
-            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jne " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jne " + tokens[3]);
         } else if (opcode.equals("NEF")) {
-            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jne " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jne " + tokens[3]);
         } else if (opcode.equals("EQI") || opcode.equals("EQ")) {
-            this.addNode("cmpi " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jeq " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpi " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jeq " + tokens[3]);
         } else if (opcode.equals("EQF")){
-            this.addNode("cmpr " + this.convertRegister(inputNode.code.split(" ")[1]) 
-                    + " " + this.convertRegister(inputNode.code.split(" ")[2]));
-            this.addNode("jeq " + inputNode.code.split(" ")[3]);
+            this.addNode("cmpr " + this.convertRegister(tokens[1]) 
+                    + " " + this.convertRegister(tokens[2]));
+            this.addNode("jeq " + tokens[3]);
         } else if (opcode.equals("JUMP")) {
-            this.addNode("jmp " + inputNode.code.split(" ")[1]);
+            this.addNode("jmp " + tokens[1]);
         } else if (opcode.equals("READI")) {
-            this.addNode("sys readi " + inputNode.code.split(" ")[1]);
+            this.addNode("sys readi " + tokens[1]);
         } else if (opcode.equals("READF")) {
-            this.addNode("sys readr " + inputNode.code.split(" ")[1]);
+            this.addNode("sys readr " + tokens[1]);
         } else if (opcode.equals("WRITEI")) {
-            this.addNode("sys writei " + inputNode.code.split(" ")[1]);
+            this.addNode("sys writei " + tokens[1]);
         } else if (opcode.equals("WRITEF")) {
-            this.addNode("sys writer " + inputNode.code.split(" ")[1]);
+            this.addNode("sys writer " + tokens[1]);
         } else if (opcode.equals("WRITES")) {
-            this.addNode("sys writes " + inputNode.code.split(" ")[1]);
+            this.addNode("sys writes " + tokens[1]);
         } else if (opcode.equals("RET")) {
-            this.addNode("sys halt");
+            this.addNode("unlink");
+            this.addNode("ret");
         } else if (opcode.equals("LINK")) {
             //do nothing (maybe)
         } else {
