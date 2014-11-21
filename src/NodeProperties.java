@@ -2,12 +2,14 @@ import java.util.LinkedHashMap;
 import java.util.Set;
 import java.util.List;
 import java.util.Arrays;
+import java.util.ArrayList;
 
 public class NodeProperties {
     public String text = null;
     LinkedHashMap<String, String> data = new LinkedHashMap<>();
+    ArrayList<String> exprListPrimaries = new ArrayList<String>();
 
-    static String[] _keys = {"primary", "assign_Lvalue",
+    static String[] _keys = {"primary", "primary_name", "assign_Lvalue",
                         "addop", "mulop", "compop",
                         "jump_label", "on_stmt_exit",
                         "on_else_enter", "on_else_exit",
