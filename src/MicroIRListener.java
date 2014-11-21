@@ -379,6 +379,46 @@ public class MicroIRListener extends MicroBaseListener {
                 + " " + symbolTree.getName(LvalueID));
     }
 
+    @Override public void exitCall_expr(
+            MicroParser.Call_exprContext ctx) {
+        String funcName = ctx.getChild(0).getText();
+        ParseTree exprList = ctx.getChild(2);
+        ArrayList<String> arguments = ptp.get(exprList).exprListPrimaries;
+
+        ll.addNode("PUSH"); // space for return
+
+        for (String argument : arguments) {
+            ll.addNode("PUSH " + 
+                    symbolTree.getName(argument)); // arg registers
+        }
+
+        ll.addNode("JSR " + funcName); //jump
+
+        for (String argument : arguments) {
+            ll.addNode("POP"); // POP POP
+        }
+
+        String funcType = 
+            symbolTree.functions.get(funcName).getReturnType();
+        String returnRegister = getNewRegister(funcType);
+
+        ll.addNode("POP " + returnRegister);
+        addNodeProp(ctx, "primary", returnRegister);
+    }
+
+
+    @Override public void exitExpr(
+            MicroParser.ExprContext ctx) {
+        // if we're inside an expr list, we need to update the 
+        // expr list primaries arraylist
+        NodeProperties nodeProps = ptp.get(ctx);
+
+        if (ctx.getParent().getRuleIndex() == 31 || ctx.getParent().getRuleIndex() == 32) {
+            nodeProps.exprListPrimaries.add(nodeProps.getValue("primary"));
+        }
+    }
+
+
     @Override public void exitId(
             MicroParser.IdContext ctx) {
         NodeProperties parentNodeProps = ptp.get(ctx.getParent());
@@ -453,6 +493,13 @@ public class MicroIRListener extends MicroBaseListener {
                     ( key.equals("primary") || parentNode.isNull(key) )) {
                     parentNode.putValue(key, value);
                 }
+            }
+
+            // if we're inside an expr_list or expr_list_tail
+            // pass the primaries up
+            int parentRuleIndex = ctx.getParent().getRuleIndex();
+            if (parentRuleIndex == 31 || parentRuleIndex == 32) {
+                parentNode.exprListPrimaries.addAll(thisNode.exprListPrimaries);
             }
         }
     }
