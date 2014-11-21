@@ -305,18 +305,20 @@ public class MicroIRListener extends MicroBaseListener {
         String funcType = ctx.getChild(1).getText();
         String[] paramStrings = ctx.getChild(4).getText().split(",");
 
-        FunctionProps newFunction = new FunctionProps(funcName, funcType);
+        //FunctionProps newFunction = new FunctionProps(funcName, funcType);
+        FunctionProps funcProps = symbolTree.functions.get(funcName);
+        funcProps.setReturnType(funcType);
 
         for (int i = 0; i < paramStrings.length; i++) {
             // JANK AS WHAT
             String paramName = null;
             if (paramStrings[i].startsWith("FLOAT", 0)) {
                 paramName = paramStrings[i].substring(5);
-                newFunction.addParam(paramName, "FLOAT");
+                funcProps.addParam(paramName, "FLOAT");
 
             } else if (paramStrings[i].startsWith("INT", 0)) {
                 paramName = paramStrings[i].substring(3);
-                newFunction.addParam(paramName, "INT");
+                funcProps.addParam(paramName, "INT");
             } 
 
             // tell the symbol tree to give this variable a parameter stack address
@@ -325,7 +327,8 @@ public class MicroIRListener extends MicroBaseListener {
             }
         }
 
-        symbolTree.functions.put(funcName, newFunction);
+        // put the updated object back in the hash
+        symbolTree.functions.put(funcName, funcProps);
 
         // label with the function name
         ll.addNode("LABEL " + ctx.getChild(2).getText());
