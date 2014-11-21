@@ -33,6 +33,10 @@ public class FunctionProps {
         return locals.size();
     }
 
+    public int numParams() {
+        return params.size();
+    }
+
     public String getName() {
         return this.funcName;
     }
