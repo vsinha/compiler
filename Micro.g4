@@ -45,8 +45,7 @@ var_decl
   : var_type id_list ';'
     { 
     // add to symbol table in current scope
-    symbolTree.addVariables($id_list.ids, $var_type.text);
-
+    symbolTree.addLocals($id_list.ids, $var_type.text);
     }
   ;
 
