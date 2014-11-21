@@ -288,7 +288,6 @@ public class MicroIRListener extends MicroBaseListener {
         String temp = getNewRegister("INT"); // type doesn't matter 
             // because we're going to manually specify the opcodes and 
             // exit quickly.
-        System.out.println("here4");
 
         ll.addNode(opcode + " " 
                 + symbolTree.getName(primary) + " " + temp);
@@ -310,7 +309,6 @@ public class MicroIRListener extends MicroBaseListener {
 
         for (int i = 0; i < paramStrings.length; i++) {
             // JANK AS WHAT
-            System.out.println("here5: " + paramStrings[i]);
             String paramName = null;
             if (paramStrings[i].startsWith("FLOAT", 0)) {
                 paramName = paramStrings[i].substring(5);
@@ -318,13 +316,11 @@ public class MicroIRListener extends MicroBaseListener {
 
             } else if (paramStrings[i].startsWith("INT", 0)) {
                 paramName = paramStrings[i].substring(3);
-                System.out.println("here5: " + paramName);
                 newFunction.addParam(paramName, "INT");
             } 
 
             // tell the symbol tree to give this variable a parameter stack address
             if (paramName != null) { // lol 
-                System.out.println("setting parameter " + paramName);
                 symbolTree.setIsParameter(paramName);
             }
         }
@@ -335,12 +331,10 @@ public class MicroIRListener extends MicroBaseListener {
         ll.addNode("LABEL " + ctx.getChild(2).getText());
         ll.addNode("LINK");
     }
-    
+
     @Override public void exitFunc_decl(
             MicroParser.Func_declContext ctx) {
         symbolTree.exitScope();
-
-        ll.addNode("RET");
     }
 
     @Override public void enterAssign_expr(
