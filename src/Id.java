@@ -5,12 +5,16 @@ public class Id {
     int size;
     int offset;
     boolean isRegister;
+    boolean isParameter;
+    private String stackAddress;
 
     public Id (String name, String type) {
         this.name = name;
         this.type = type;
         this.value = null;
         this.isRegister = false;
+        this.isParameter = false;
+        this.stackAddress = null;
     }
 
     // for string variables
@@ -19,18 +23,44 @@ public class Id {
         this.type = type;
         this.value = value;
         this.isRegister = false;
+        this.isParameter = false;
     }
 
     public void setIsRegister() {
         this.isRegister = true;
+        this.stackAddress = this.name;
     }
 
     public boolean isRegister() {
         return this.isRegister;
     }
 
+    public void setIsParameter() {
+        this.isParameter = true;
+    }
+
+    public boolean isParameter() {
+        return this.isParameter;
+    }
+
     public boolean isString() {
         return type.equals("STRING");
+    }
+
+    public void setStackAddress(String stackAddress) {
+        this.stackAddress = stackAddress;
+    }
+
+    public String getStackAddress() {
+        return this.stackAddress;
+    }
+
+    public String getName() {
+        if (this.stackAddress != null) {
+            return this.stackAddress;
+        } else {
+            return this.name;
+        }
     }
 
     private int sizeof(String type) {
