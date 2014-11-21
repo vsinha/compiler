@@ -2,7 +2,7 @@
 
 make clean; make compiler
 
-FILES=$(ls testcases/step5/input/ | sort -k1.5n)
+FILES=$(ls testcases/step6/input/ | sort -k1.5n)
 
 let failCount=0
 let passCount=0
@@ -12,9 +12,9 @@ do
     FILENAME=${f##*/}
     FILENAME=${FILENAME%.micro}
     echo "Runnning $FILENAME"
-    OUTPUT=$(java -cp lib/antlr.jar:classes/ Micro testcases/step5/input/$FILENAME.micro > deleteMe.tiny; tiny_simulator/tiny deleteMe.tiny > deleteMe2.out; cat deleteMe2.out | sed "/STATISTICS/q" | sed '$d')
+    OUTPUT=$(java -cp lib/antlr.jar:classes/ Micro testcases/step6/input/$FILENAME.micro > temp.tiny; tiny_simulator/tiny temp.tiny > temp.out; cat temp.out | sed "/STATISTICS/q" | sed '$d')
     echo -e "Output:\n$OUTPUT"
-    EXPECTEDOUTPUT=$(cat testcases/step5/output/$FILENAME.out > deleteMe.tiny; tiny_simulator/tiny deleteMe.tiny > deleteMe2.out; cat deleteMe2.out | sed "/STATISTICS/q" | sed '$d')
+    EXPECTEDOUTPUT=$(cat testcases/step6/output/$FILENAME.out > temp.tiny; tiny_simulator/tiny temp.tiny > temp.out; cat temp.out | sed "/STATISTICS/q" | sed '$d')
     echo -e "Expected Output:\n$EXPECTEDOUTPUT"
     
     EXPECTEDOUTPUT="${EXPECTEDOUTPUT}"
