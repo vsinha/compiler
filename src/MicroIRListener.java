@@ -1,5 +1,6 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.*;
+import java.util.ArrayList;
 
 public class MicroIRListener extends MicroBaseListener {
 
@@ -298,6 +299,37 @@ public class MicroIRListener extends MicroBaseListener {
     @Override public void enterFunc_decl(
             MicroParser.Func_declContext ctx) {
         symbolTree.enterScopeSequentially();
+
+        registerNumber = 0;
+
+        String funcName = ctx.getChild(2).getText();
+        String funcType = ctx.getChild(1).getText();
+        String[] paramStrings = ctx.getChild(4).getText().split(",");
+
+        FunctionProps newFunction = new FunctionProps(funcName, funcType);
+
+        for (int i = 0; i < paramStrings.length; i++) {
+            // JANK AS WHAT
+            System.out.println("here5: " + paramStrings[i]);
+            String paramName = null;
+            if (paramStrings[i].startsWith("FLOAT", 0)) {
+                paramName = paramStrings[i].substring(5);
+                newFunction.addParam(paramName, "FLOAT");
+
+            } else if (paramStrings[i].startsWith("INT", 0)) {
+                paramName = paramStrings[i].substring(3);
+                System.out.println("here5: " + paramName);
+                newFunction.addParam(paramName, "INT");
+            } 
+
+            // tell the symbol tree to give this variable a parameter stack address
+            if (paramName != null) { // lol 
+                System.out.println("setting parameter " + paramName);
+                symbolTree.setIsParameter(paramName);
+            }
+        }
+
+        symbolTree.functions.put(funcName, newFunction);
 
         // label with the function name
         ll.addNode("LABEL " + ctx.getChild(2).getText());
