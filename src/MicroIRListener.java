@@ -278,6 +278,23 @@ public class MicroIRListener extends MicroBaseListener {
         symbolTree.exitScope();
     }
 
+
+    @Override public void exitReturn_stmt(
+            MicroParser.Return_stmtContext ctx) {
+        String primary = ptp.get(ctx).getValue("primary");
+        String opcode = typedStoreOp(primary);
+
+        String temp = getNewRegister("INT"); // type doesn't matter 
+            // because we're going to manually specify the opcodes and 
+            // exit quickly.
+        System.out.println("here4");
+
+        ll.addNode(opcode + " " 
+                + symbolTree.getName(primary) + " " + temp);
+        ll.addNode(opcode + " " + temp + " $R");
+        ll.addNode("RET");
+    }
+    
     @Override public void enterFunc_decl(
             MicroParser.Func_declContext ctx) {
         symbolTree.enterScopeSequentially();
