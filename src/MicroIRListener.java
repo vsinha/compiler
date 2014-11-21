@@ -354,16 +354,19 @@ public class MicroIRListener extends MicroBaseListener {
         String storeOp = typedStoreOp(Lvalue);
 
         // if the Rvalue is a variable, move it to a register first
-        Id RvalueId = symbolTree.lookup(Rvalue);
-        if (!RvalueId.isRegister()) {
+        Id LvalueID = symbolTree.lookup(Lvalue);
+        Id RvalueID = symbolTree.lookup(Rvalue);
+        
+        //System.out.println(ctx.getRuleIndex());
+        if (!RvalueID.isRegister()) {
             String temp = null;
 
-            if (RvalueId.type.equals("INT")) {
+            if (RvalueID.type.equals("INT")) {
               temp = getNewRegister("INT");
-              ll.addNode("STOREI " + Rvalue + " " + temp);
-            } else if (RvalueId.type.equals("FLOAT")) {
+              ll.addNode("STOREI " + symbolTree.getName(RvalueID) + " " + temp);
+            } else if (RvalueID.type.equals("FLOAT")) {
               temp = getNewRegister("FLOAT");
-              ll.addNode("STOREF " + Rvalue + " " + temp);
+              ll.addNode("STOREF " + symbolTree.getName(RvalueID) + " " + temp);
             } else {
                 System.out.println("Houston, we have a problem");
             }
@@ -469,8 +472,10 @@ public class MicroIRListener extends MicroBaseListener {
             //System.out.println("opcode lookup: " + opcode);
 
             ll.addNode(opcode + " "
-                    + expr_prefix.getValue("primary") + " "
-                    + ptp.get(ctx).getValue("primary") + " "
+                    + symbolTree.getName(expr_prefix.getValue("primary")) 
+                    + " "
+                    + symbolTree.getName(ptp.get(ctx).getValue("primary")) 
+                    + " "
                     + temp
                     );
 
@@ -494,8 +499,8 @@ public class MicroIRListener extends MicroBaseListener {
                         factor_prefix.getValue("mulop"), type);
 
                 ll.addNode(opcode + " "
-                        + factor_prefix.getValue("primary") + " " 
-                        + ptp.get(ctx).getValue("primary") + " "
+                        + symbolTree.getName(factor_prefix.getValue("primary")) + " " 
+                        + symbolTree.getName(ptp.get(ctx).getValue("primary")) + " "
                         + temp
                         );
 
@@ -534,10 +539,10 @@ public class MicroIRListener extends MicroBaseListener {
             String temp = null;
             if (rightsideID.type.equals("INT")) {
                 temp = getNewRegister("INT");
-                ll.addNode("STOREI " + rightsideID.name + " " + temp);
+                ll.addNode("STOREI " + symbolTree.getName(rightsideID) + " " + temp);
             } else if (rightsideID.type.equals("FLOAT")) {
                 temp = getNewRegister("FLOAT");
-                ll.addNode("STOREF " + rightsideID.name + " " + temp);
+                ll.addNode("STOREF " + symbolTree.getName(rightsideID) + " " + temp);
             } else {
                 System.out.println("Catastrophic typing error.");
             }
@@ -548,8 +553,8 @@ public class MicroIRListener extends MicroBaseListener {
 
         ll.addNode( 
                 opcode + " " + 
-                leftsideVar + " " + 
-                rightsideVar + " " +
+                symbolTree.getName(leftsideVar) + " " + 
+                symbolTree.getName(rightsideVar) + " " +
                 label
                 );
     }
@@ -579,7 +584,7 @@ public class MicroIRListener extends MicroBaseListener {
                     opcode = "READF";
                 } 
 
-                ll.addNode(opcode + " " + varName);
+                ll.addNode(opcode + " " + symbolTree.getName(varName));
             }
 
         }
