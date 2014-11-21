@@ -27,16 +27,17 @@ public class TinyLinkedList {
         tail = head;
         this.symbols = symbols;
 
-            Set<String> keys = symbols.global.table.keySet();
-            for (String key : keys) {
-                Id var = symbols.lookup(key);
-                String varName = symbols.global.table.get(key).toString().split(" ")[1];
-                if (var.isString()) {
-                    addNode("str " + varName + " " + var.value);
-                } else {
-                    addNode("var " + varName);
-                }
+        // add strings
+        Set<String> keys = symbols.global.table.keySet();
+        for (String key : keys) {
+            Id var = symbols.lookup(key);
+            String varName = symbols.global.table.get(key).toString().split(" ")[1];
+            if (var.isString()) {
+                addNode("str " + varName + " " + var.value);
+            } else {
+                addNode("var " + varName);
             }
+        }
 
         irll.head = irll.head.next;
 
