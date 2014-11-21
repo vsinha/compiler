@@ -374,7 +374,9 @@ public class MicroIRListener extends MicroBaseListener {
             Rvalue = temp; // this is good code right?
         }
 
-        ll.addNode(storeOp + " " + Rvalue + " " + Lvalue);
+        ll.addNode(storeOp 
+                + " " + symbolTree.getName(RvalueID) 
+                + " " + symbolTree.getName(LvalueID));
     }
 
     @Override public void exitId(
