@@ -42,6 +42,7 @@ public class TinyLinkedList {
             this.convertNode(irll.head);
             irll.head = irll.head.next;
         }
+        this.addNode("end");
     }
 
 
@@ -54,6 +55,10 @@ public class TinyLinkedList {
         tail = newNode;
     }
 
+    // check this flag to know that we should jump over other function
+    // declarations to start in 'main'
+    private boolean finishedAddingGlobals = false;
+    
 
     private void convertNode( IRLinkedList.Node inputNode){
         String[] nodeArray = {};
@@ -71,6 +76,11 @@ public class TinyLinkedList {
         if (opcode == null) {
             this.addNode("error in tiny conversion: opcode is null");
         } else if(opcode.equals("LABEL")) {
+            if (finishedAddingGlobals == false && !tokens[1].equals("main")) {
+                this.addNode("jsr main");
+                this.addNode("sys halt");
+                finishedAddingGlobals = true;
+            }
             this.addNode("label " + tokens[1]);
         } else if (opcode.equals("ADDI")) {
             this.moveConversion(nodeArray[1], nodeArray[3]);
