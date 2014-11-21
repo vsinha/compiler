@@ -36,7 +36,7 @@ public class Micro {
             System.out.println(";tiny code");
 
             TinyLinkedList tinyll = new TinyLinkedList(listener.ll, listener.symbolTree);
-            System.out.print(tinyll);
+            //System.out.print(tinyll);
             System.out.println();
 
 
