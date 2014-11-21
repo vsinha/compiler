@@ -91,7 +91,7 @@ param_decl_list
 param_decl
   : var_type id 
     { 
-      symbolTree.addVariable($id.text, $var_type.text);
+      symbolTree.addParameter($id.text, $var_type.text);
     }
   ;
 
