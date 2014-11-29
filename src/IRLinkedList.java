@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+
 public class IRLinkedList {
     Node head;
     Node tail;
@@ -30,6 +32,20 @@ public class IRLinkedList {
         newNode.prev = tail;
         tail.next = newNode;
         tail = newNode;
+    }
+
+    public LinkedList<String> getLinkedList() {
+       LinkedList<String> ll = new LinkedList<String>();
+
+       Node curr = this.head;
+       while (curr != null) {
+           if (curr.code != null && !curr.code.isEmpty()) {
+               ll.add(curr.code);
+           }
+           curr = curr.next;
+       }
+
+       return ll;
     }
 
     @Override
