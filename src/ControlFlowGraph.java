@@ -66,6 +66,21 @@ public class ControlFlowGraph {
         // now we have individual linked lists for each function
         printCFLL();
 
+        //// 2 ////
+        // for each function, populate the successor and predecessor nodes,
+        // turning the individual function linked lists into actual
+        // control flow graphs
+        for (LinkedList<CFNode> ll : cfLLs) {
+            for (CFNode node : ll) {
+                // when we see an unconditional jump, add the target as a successor
+                // of the jump, and the jump statement as a predecessor of the target
+                if (node.getOpcode().equals("JUMP")) {
+                }
+
+
+            }
+
+        }
 
     }
 
