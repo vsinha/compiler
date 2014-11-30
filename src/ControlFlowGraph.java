@@ -14,7 +14,7 @@ public class ControlFlowGraph {
 
         ArrayList<String> gen; // variables created
         ArrayList<String> kill; // variables used
-        
+
         public CFNode (String[] code) {
             this.code = code;
             this.predecessors = new ArrayList<CFNode>();
@@ -59,6 +59,12 @@ public class ControlFlowGraph {
         public void defines(String s) {
             //KILL represents all the temporaries and variables that are *defined* in an instruction
             this.kill.add(s);
+        }
+
+        public boolean isLeader() {
+            // either has predecessors other than the immediately preceding instruction
+            // or has successors other than the immediately following instruction
+            return (!node.successors.isEmpty() || !node.predecessors.isEmpty());
         }
 
         @Override 
