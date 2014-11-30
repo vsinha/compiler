@@ -121,9 +121,19 @@ public class ControlFlowGraph {
         // now we have individual linked lists for each function
         //printCFLL();
 
-        // note that each node technically has the next node as a successor and 
-        // the previous node as a predecessor, but we're using the linked list builtins
-        // to handle that.
+        // each node.next is a sucessor and node.prev is a predecessor
+        for (LinkedList<CFNode> ll : cfLLs) {
+            // get the first node
+            for (int i = 0; i < ll.size(); i++) {
+                if (i > 0) { // node[i] has a predecessor
+                    ll.get(i).addPredecessor(ll.get(i-1));
+                }
+                if (i < ll.size() - 1) { // node[i] has a successor
+                    ll.get(i).addSuccessor(ll.get(i+1));
+                }
+
+            }
+        }
 
         //// 2 ////
         // for each function, populate the successor and predecessor nodes,
