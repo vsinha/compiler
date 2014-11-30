@@ -68,7 +68,7 @@ public class ControlFlowGraph {
         public boolean isLeader() {
             // either has predecessors other than the immediately preceding instruction
             // or has successors other than the immediately following instruction
-            return (!node.successors.isEmpty() || !node.predecessors.isEmpty());
+            return (!this.successors.isEmpty() || !this.predecessors.isEmpty());
         }
 
         @Override 
@@ -81,7 +81,7 @@ public class ControlFlowGraph {
         }
     }
 
-    public ControlFlowGraph(LinkedList<String> irLLi, SymbolTableTree symbolTree) {
+    public ControlFlowGraph(LinkedList<String> irLL, SymbolTableTree symbolTree) {
         this.symbolTree = symbolTree;
 
         //// 1 ////
