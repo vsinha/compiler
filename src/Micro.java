@@ -35,7 +35,8 @@ public class Micro {
             //System.out.println(listener.ll);
             //System.out.print(";tiny code");
 
-            ControlFlowGraph cfg = new ControlFlowGraph(listener.ll.getLinkedList());
+            ControlFlowGraph cfg = new ControlFlowGraph(listener.ll.getLinkedList(),
+                    listener.symbolTree);
 
             TinyLinkedList tinyll = new TinyLinkedList(listener.ll, listener.symbolTree);
             //System.out.print(tinyll);

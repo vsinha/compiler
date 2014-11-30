@@ -6,6 +6,7 @@ public class ControlFlowGraph {
     // so we can store 1 list per function, and be able to hold on to
     // successor and predecessor information for the list nodes
     ArrayList<LinkedList<CFNode>> cfLLs;
+    SymbolTableTree symbolTree;
 
     class CFNode {
         String[] code;
@@ -14,6 +15,9 @@ public class ControlFlowGraph {
 
         ArrayList<String> gen; // variables created
         ArrayList<String> kill; // variables used
+
+        ArrayList<String> in;
+        ArrayList<String> out;
 
         public CFNode (String[] code) {
             this.code = code;
@@ -77,7 +81,9 @@ public class ControlFlowGraph {
         }
     }
 
-    public ControlFlowGraph(LinkedList<String> irLL) {
+    public ControlFlowGraph(LinkedList<String> irLLi, SymbolTableTree symbolTree) {
+        this.symbolTree = symbolTree;
+
         //// 1 ////
         // parse the linked list into a list of CFNode linked lists
         // this breaks the IR into individual functions so we can 
