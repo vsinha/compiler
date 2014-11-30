@@ -166,8 +166,9 @@ public class ControlFlowGraph {
         for (LinkedList<CFNode> ll : cfLLs) {
             for (CFNode node : ll) {
                 computeGenKill(node);
-                System.out.println(node.toString() + " " + node.successors + " " + node.predecessors
-                        +  "  " + node.gen + " " + node.kill);
+                System.out.println(node.toString() 
+                        + " " + node.successors + " " + node.predecessors
+                        + " " + node.gen + " " + node.kill);
             }
             System.out.println();
         }
