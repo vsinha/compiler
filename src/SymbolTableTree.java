@@ -69,8 +69,12 @@ public class SymbolTableTree {
         functions.put(currentFunction, new FunctionProps(currentFunction));
     }
 
-    public LinkedHashMap<String, Id> getGlobalVariables() {
-        return global.table;
+    public ArrayList<String> getGlobalVariableStackAddressNames() {
+        ArrayList<String> globals = new ArrayList<String>();
+        for (Id var : global.table.values()) {
+            globals.add(getName(var));
+        }
+        return globals;
     }
 
     public boolean isInteger(String s) {

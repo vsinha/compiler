@@ -25,6 +25,7 @@ public class ControlFlowGraph {
             this.successors = new ArrayList<CFNode>();
             this.gen = new ArrayList<String>();
             this.kill = new ArrayList<String>();
+
         }
 
         public String getOpcode() {
@@ -123,13 +124,6 @@ public class ControlFlowGraph {
         // note that each node technically has the next node as a successor and 
         // the previous node as a predecessor, but we're using the linked list builtins
         // to handle that.
-        /*
-            // ... maybe we should fix this ^^^
-            // add every node's immediately previous node as a predecessor
-            // and every node (except for return statements) next node as a successor
-            for (LinkedList<CFNode> ll : cfLLs) {
-            }
-        */
 
         //// 2 ////
         // for each function, populate the successor and predecessor nodes,
@@ -178,6 +172,11 @@ public class ControlFlowGraph {
             }
             System.out.println();
         }
+
+        // initialize in and out sets
+        ArrayList<String> globals = symbolTree.getGlobalVariableStackAddressNames();
+
+        System.out.println(globals.toString());
     }
 
 
