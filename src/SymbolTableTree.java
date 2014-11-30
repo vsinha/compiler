@@ -69,6 +69,10 @@ public class SymbolTableTree {
         functions.put(currentFunction, new FunctionProps(currentFunction));
     }
 
+    public LinkedHashMap<String, Id> getGlobalVariables() {
+        return global.table;
+    }
+
     public boolean isInteger(String s) {
         try { 
             Integer.parseInt(s); 
