@@ -167,7 +167,7 @@ public class ControlFlowGraph {
             for (CFNode node : ll) {
                 computeGenKill(node);
                 System.out.println(node.toString() + " " + node.successors + " " + node.predecessors
-                        +  " " + node.gen + " " + node.kill);
+                        +  "  " + node.gen + " " + node.kill);
             }
             System.out.println();
         }
@@ -199,7 +199,11 @@ public class ControlFlowGraph {
             node.defines(node.code[3]);
 
         } else if (opcode.startsWith("STORE")) { // store
+            node.uses(node.code[1]);
             node.defines(node.code[2]);
+        } else if (opcode.startsWith("STORE")) { // load
+            node.defines(node.code[1]);
+            node.uses(node.code[2]);
 
         } else if (opcode.startsWith("GE") || opcode.startsWith("LE")  // comparators
                 || opcode.startsWith("NE") || opcode.startsWith("EQ")) {
