@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.LinkedList;
 
 public class ControlFlowGraph {
@@ -21,11 +23,15 @@ public class ControlFlowGraph {
 
         public CFNode (String[] code) {
             this.code = code;
+
             this.predecessors = new ArrayList<CFNode>();
             this.successors = new ArrayList<CFNode>();
+
             this.gen = new ArrayList<String>();
             this.kill = new ArrayList<String>();
 
+            this.in = new ArrayList<String>();
+            this.out = new ArrayList<String>();
         }
 
         public String getOpcode() {
@@ -183,11 +189,55 @@ public class ControlFlowGraph {
             System.out.println();
         }
 
-        // initialize in and out sets
         ArrayList<String> globals = symbolTree.getGlobalVariableStackAddressNames();
 
-        System.out.println(globals.toString());
-    }
+        for (LinkedList<CFNode> ll : cfLLs) {
+
+            // initialize in and out sets and put all nodes on the worklist
+            ArrayList<CFNode> workList = new ArrayList<CFNode>();
+            for(CFNode node : ll) {
+                // initialize the out set for return statements
+                if (node.getOpcode().equals("RET")) { 
+                    node.in.addAll(globals);
+                }
+                workList.add(node);
+            }
+
+            // calculate the in and out sets (find the fixed point)
+            while(!workList.isEmpty()) {
+                // pull the first item out of the workList
+                CFNode curr = workList.get(0);
+                workList.remove(curr);
+
+                // the set of variables that are live out of a node is the union
+                // of all variables that are live into the nodes successors
+                HashSet<String> newOut = new HashSet<String>();
+                for (CFNode successor : curr.successors) {
+                    newOut.addAll(successor.in);
+                }
+                curr.out = new ArrayList<String>(newOut);
+
+                // the set of variables that are live in to a node is the set of
+                // variables that are live out for the node, minus any variables that
+                // are killed by the node, plus any variables that are gen'd by the node
+                HashSet<String> newIn = new HashSet<String>();
+                newIn.addAll(newOut);
+                newIn.removeAll(curr.kill);
+                newIn.addAll(curr.gen);
+
+                // if a node's live In set has changed, add all its predecessors to the work list
+                // because they may need to update their live-out sets
+                if (!curr.in.equals(newIn)) {
+                    // update the node
+                    curr.in = new ArrayList<String>(newIn);
+                    System.out.println(curr.out + " " + curr.in + " " + curr);
+
+                    // add predecessors onto the worklist
+                    workList.addAll(curr.predecessors);
+                } 
+            }
+        }
+    } // end of this construcor mother-of-all-methods
 
 
     public void printCFLL() {
@@ -245,9 +295,4 @@ public class ControlFlowGraph {
 
     }
 }
-
-
-
-
-
 
