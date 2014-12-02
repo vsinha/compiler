@@ -171,11 +171,6 @@ public class ControlFlowGraph {
                     }
                 }
             }
-
-            // print it
-            for (CFNode node : ll) {
-                //System.out.println(node.toString() + " " + node.successors + " " + node.predecessors);
-            }
         }
 
         // compute GEN and KILL sets
