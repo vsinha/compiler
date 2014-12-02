@@ -10,6 +10,7 @@ public class ControlFlowGraph {
     ArrayList<LinkedList<CFNode>> cfLLs;
     SymbolTableTree symbolTree;
 
+
     class CFNode {
         String[] code;
         ArrayList<CFNode> predecessors;
@@ -88,6 +89,7 @@ public class ControlFlowGraph {
         }
     }
 
+
     public ControlFlowGraph(LinkedList<String> irLL, SymbolTableTree symbolTree) {
         this.symbolTree = symbolTree;
 
@@ -125,7 +127,6 @@ public class ControlFlowGraph {
         cfLLs.add(currentFunctionLL);
 
         // now we have individual linked lists for each function
-        //printCFLL();
 
         // each node.next is a sucessor and node.prev is a predecessor
         for (LinkedList<CFNode> ll : cfLLs) {
@@ -137,7 +138,6 @@ public class ControlFlowGraph {
                 if (i < ll.size() - 1) { // node[i] has a successor
                     ll.get(i).addSuccessor(ll.get(i+1));
                 }
-
             }
         }
 
@@ -148,22 +148,16 @@ public class ControlFlowGraph {
         for (LinkedList<CFNode> ll : cfLLs) {
             System.out.println();
             for (CFNode node : ll) {
-                //System.out.println(node);
-
                 // when we see an unconditional jump, add the target as a successor
                 // of the jump, and the jump statement as a predecessor of the target
                 if (node.getOpcode().equals("JUMP") || node.isConditional()) {
-                    //System.out.println("here");
-
                     String jumpLabel = node.getLabel();
-                    //System.out.println("looking for: " + jumpLabel);
 
                     // find the CFNode with the corresponding label in the function
                     for (CFNode targetNode : ll) {
 
                         if (targetNode.getOpcode().equals("LABEL") 
                                 && targetNode.getLabel().equals(jumpLabel)) {
-                            //System.out.println("adding " + node + " and " + targetNode);
                             // when we find it, link the two nodes together
                             node.addSuccessor(targetNode);
                             targetNode.addPredecessor(node);
@@ -230,7 +224,7 @@ public class ControlFlowGraph {
                     // add predecessors onto the worklist
                     workList.addAll(curr.predecessors);
                 } 
-            }
+            } // when we exit this while loop, we now have a fixed point for in/out sets
         }
     } // end of this construcor mother-of-all-methods
 
@@ -286,8 +280,6 @@ public class ControlFlowGraph {
                 node.defines(node.code[1]);
             }
         }
-                
-
     }
 }
 
