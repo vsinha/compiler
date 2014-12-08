@@ -30,17 +30,17 @@ public class Micro {
             walker.walk(listener, tree); 
 
             // Print everything out
-            //System.out.print(";IR code");
+            System.out.print(";IR code");
             // newlines are printed by the toString...
-            //System.out.println(listener.ll);
-            //System.out.print(";tiny code");
+            System.out.println(listener.ll);
+            System.out.print(";tiny code");
 
             ControlFlowGraph cfg = new ControlFlowGraph(listener.ll.getLinkedList(),
                     listener.symbolTree);
 
             TinyLinkedList tinyll = new TinyLinkedList(listener.ll, listener.symbolTree);
-            //System.out.print(tinyll);
-            //System.out.println();
+            System.out.print(tinyll);
+            System.out.println();
 
 
         } catch (ParseCancellationException e) {
