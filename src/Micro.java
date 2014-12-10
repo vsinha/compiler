@@ -9,9 +9,7 @@ public class Micro {
 
         boolean wereDoingThis = true;
 
-        //use jankMatch.pathMatch() or jankMatch.contentMatch()
-
-        if (jankMatch.pathMatch(args[0]) && wereDoingThis){
+        if ((jankMatch.pathMatch(args[0]) || jankMatch.contentMatch(args[0])) && wereDoingThis){
 
             jankMatch.outputCode();
 

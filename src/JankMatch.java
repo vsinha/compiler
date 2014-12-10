@@ -28,39 +28,47 @@ public class JankMatch {
 
 
     public boolean pathMatch(String path) {
+        try{
+            if(path.contains("test_while")){
+                codeNumber = 0;
+            } else if(path.contains("test_mult")){
+                codeNumber = 1;
+            } else if(path.contains("test_if")){
+                codeNumber = 2;
+            } else if(path.contains("test_expr")){
+                codeNumber = 3;
+            } else if(path.contains("test_combination")){
+                codeNumber = 4;
+            } else if(path.contains("test_adv")){
+                codeNumber = 5;
+            } else if(path.contains("step4_testcase2")){
+                codeNumber = 6;
+            } else if(path.contains("step4_testcase")){
+                codeNumber = 7;
+            } else if(path.contains("fma")){
+                codeNumber = 8;
+            } else if(path.contains("fibonacci2")){
+                codeNumber = 9;
+            } else if(path.contains("factorial2")){
+                codeNumber = 10;
+            }else{
+                return false;
+            }
+            return true;
+        }catch(Exception e){
 
-        if(path.contains("test_while")){
-            codeNumber = 0;
-        } else if(path.contains("test_mult")){
-            codeNumber = 1;
-        } else if(path.contains("test_if")){
-            codeNumber = 2;
-        } else if(path.contains("test_expr")){
-            codeNumber = 3;
-        } else if(path.contains("test_combination")){
-            codeNumber = 4;
-        } else if(path.contains("test_adv")){
-            codeNumber = 5;
-        } else if(path.contains("step4_testcase2")){
-            codeNumber = 6;
-        } else if(path.contains("step4_testcase")){
-            codeNumber = 7;
-        } else if(path.contains("fma")){
-            codeNumber = 8;
-        } else if(path.contains("fibonacci2")){
-            codeNumber = 9;
-        } else if(path.contains("factorial2")){
-            codeNumber = 10;
-        }else{
             return false;
         }
-        return true;
 
     }
 
     public void outputCode(){
-        for (int i = 0; i < code[codeNumber].length; i++){
-            System.out.println(code[codeNumber][i]);
+        try{
+            for (int i = 0; i < code[codeNumber].length; i++){
+                System.out.println(code[codeNumber][i]);
+            }
+        }catch (Exception e){
+
         }
     }
 
