@@ -219,20 +219,23 @@ public class ControlFlowGraph {
                 if (!curr.in.equals(newIn)) {
                     // update the node
                     curr.in = new ArrayList<String>(newIn);
-                    System.out.println(curr.out + " " + curr.in + " " + curr);
 
                     // add predecessors onto the worklist
                     workList.addAll(curr.predecessors);
                 } 
             } // when we exit this while loop, we now have a fixed point for in/out sets
         }
+        System.out.println("finished making in / out liveness sets");
+        printCFLL();
     } // end of this construcor mother-of-all-methods
 
 
     public void printCFLL() {
         for (LinkedList<CFNode> ll : cfLLs) {
             for (CFNode node : ll) {
-                System.out.println(node.toString());
+                System.out.println(node
+                        + "\n  out: " + node.in 
+                        + "\n  in:  " + node.out);
             }
             System.out.println();
         }
