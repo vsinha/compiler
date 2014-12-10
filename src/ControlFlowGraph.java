@@ -146,7 +146,7 @@ public class ControlFlowGraph {
         // turning the individual function linked lists into actual
         // control flow graphs
         for (LinkedList<CFNode> ll : cfLLs) {
-            System.out.println();
+            //System.out.println();
             for (CFNode node : ll) {
                 // when we see an unconditional jump, add the target as a successor
                 // of the jump, and the jump statement as a predecessor of the target
@@ -167,6 +167,8 @@ public class ControlFlowGraph {
             }
         }
 
+        /*
+
         // compute GEN and KILL sets
         for (LinkedList<CFNode> ll : cfLLs) {
             for (CFNode node : ll) {
@@ -177,6 +179,8 @@ public class ControlFlowGraph {
             }
             System.out.println();
         }
+
+        */
 
         ArrayList<String> globals = symbolTree.getGlobalVariableStackAddressNames();
 
