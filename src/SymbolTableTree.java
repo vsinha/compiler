@@ -48,6 +48,7 @@ public class SymbolTableTree {
         global = new SymbolTable("GLOBAL");
         currentScope = global;
         functions = new HashMap<String, FunctionProps>();
+        //createScope("main");
     }
 
     // come up with a "BLOCK %d" name 
@@ -182,7 +183,9 @@ public class SymbolTableTree {
         currentScope.table.get(name).setStackAddress("$L" + currentScope.localVarIndex);
         currentScope.localVarIndex += 1;
 
-        functions.get(currentFunction).addLocal(name, type);
+        if (currentFunction != null) {
+            functions.get(currentFunction).addLocal(name, type);
+        }
     }
 
     public void addRegister(String name, String type) {

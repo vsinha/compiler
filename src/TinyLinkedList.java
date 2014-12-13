@@ -83,7 +83,7 @@ public class TinyLinkedList {
         } else if(opcode.equals("LABEL")) {
             String labelName = tokens[1];
             // check to jump over other function declarations
-            if (finishedAddingGlobals == false && !labelName.equals("main")) {
+            if (finishedAddingGlobals == false) {
                 addNode("push");
                 pushRegisters(NUMREGISTERS);
                 addNode("jsr main");

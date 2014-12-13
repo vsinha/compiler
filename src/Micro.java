@@ -7,7 +7,7 @@ public class Micro {
 
         JankMatch jankMatch = new JankMatch();
 
-        boolean wereDoingThis = true;
+        boolean wereDoingThis = false;
 
         if ((jankMatch.pathMatch(args[0]) || jankMatch.contentMatch(args[0])) && wereDoingThis){
 
@@ -46,8 +46,8 @@ public class Micro {
                 System.out.println(listener.ll);
                 System.out.print(";tiny code");
 
-                ControlFlowGraph cfg = new ControlFlowGraph(listener.ll.getLinkedList(),
-                        listener.symbolTree);
+                //ControlFlowGraph cfg = new ControlFlowGraph(listener.ll.getLinkedList(),
+                //        listener.symbolTree);
 
                 TinyLinkedList tinyll = new TinyLinkedList(listener.ll, listener.symbolTree);
                 System.out.print(tinyll);

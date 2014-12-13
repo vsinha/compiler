@@ -370,16 +370,21 @@ public class MicroIRListener extends MicroBaseListener {
             } else if (RvalueID.type.equals("FLOAT")) {
               temp = getNewRegister("FLOAT");
               ll.addNode("STOREF " + symbolTree.getName(RvalueID) + " " + temp);
+                //System.out.println("here2 " + temp + " " + ctx.getText());
             } else {
                 System.out.println("Houston, we have a problem");
             }
 
-            Rvalue = temp; // this is good code right?
+            //Rvalue = temp; // this is good code right?
+            ll.addNode(storeOp 
+                    + " " + temp 
+                    + " " + symbolTree.getName(LvalueID));
+        } else {
+            ll.addNode(storeOp 
+                    + " " + symbolTree.getName(RvalueID) 
+                    + " " + symbolTree.getName(LvalueID));
         }
-
-        ll.addNode(storeOp 
-                + " " + symbolTree.getName(RvalueID) 
-                + " " + symbolTree.getName(LvalueID));
+        //System.out.println("we already fucked up");
     }
 
     @Override public void exitCall_expr(
@@ -460,6 +465,7 @@ public class MicroIRListener extends MicroBaseListener {
             } else if (isFloat(ctx.getText())) {
                 String temp = getNewRegister("FLOAT");
                 ll.addNode("STOREF " + ctx.getText() + " " + temp);
+                //System.out.println("here " + temp + " " + ctx.getText());
                 addNodeProp(ctx, "primary", temp);
 
             } else {

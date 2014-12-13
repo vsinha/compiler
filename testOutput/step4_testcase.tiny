@@ -1,0 +1,95 @@
+;IR code
+;LABEL main
+;LINK
+;STOREI 0 $T1
+;STOREI $T1 $L3
+;STOREI 0 $T2
+;STOREI $T2 $L1
+;STOREI 0 $T3
+;STOREI $T3 $L2
+;LABEL label1
+;STOREI 10 $T4
+;EQI $L3 $T4 label2
+;READI $L4
+;STOREI 10 $T5
+;LEI $L4 $T5 label3
+;STOREI 1 $T6
+;ADDI $L1 $T6 $T7
+;STOREI $T7 $L1
+;JUMP label4
+;LABEL label3
+;STOREI 1 $T8
+;ADDI $L2 $T8 $T9
+;STOREI $T9 $L2
+;LABEL label4
+;STOREI 1 $T10
+;ADDI $L3 $T10 $T11
+;STOREI $T11 $L3
+;JUMP label1
+;LABEL label2
+;WRITEI $L1
+;WRITES newline
+;WRITEI $L2
+;WRITES newline
+;tiny code
+var a
+var b
+var i
+var p
+str newline "\n"
+push
+push r0
+push r1
+push r2
+push r3
+push r4
+push r5
+push r6
+push r7
+push r8
+push r9
+push r10
+push r11
+push r12
+push r13
+push r14
+jsr main
+sys halt
+label main
+link 0
+move 0 r0
+move r0 $-3
+move 0 r1
+move r1 $-1
+move 0 r2
+move r2 $-2
+label label1
+move 10 r3
+cmpi $-3 r3
+jeq label2
+sys readi $-4
+move 10 r4
+cmpi $-4 r4
+jle label3
+move 1 r5
+move $-1 r6
+addi r5 r6
+move r6 $-1
+jmp label4
+label label3
+move 1 r7
+move $-2 r8
+addi r7 r8
+move r8 $-2
+label label4
+move 1 r9
+move $-3 r10
+addi r9 r10
+move r10 $-3
+jmp label1
+label label2
+sys writei $-1
+sys writes newline
+sys writei $-2
+sys writes newline
+end
